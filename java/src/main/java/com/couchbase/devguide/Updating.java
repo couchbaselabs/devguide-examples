@@ -26,7 +26,7 @@ import com.couchbase.client.java.document.json.JsonObject;
 import com.couchbase.client.java.error.DocumentAlreadyExistsException;
 
 /**
- * Example of Updating/Storing in Java for the Couchbase Developper Guide.
+ * Example of Updating/Storing in Java for the Couchbase Developer Guide.
  */
 public class Updating extends ConnectionBase {
 
