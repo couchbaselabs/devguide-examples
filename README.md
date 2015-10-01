@@ -10,7 +10,7 @@ This example should show how to connect to a remote Couchbase cluster and bucket
 
 [C](c/connecting.c) |
 [Python](python/connecting.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/ConnectionBase.java)|
 .NET |
 Go |
 node.js
@@ -20,7 +20,7 @@ This example should show how to store an item into a cluster
 
 [C](c/updating.c) |
 [Python](python/updating.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/Updating.java) |
 .NET |
 Go |
 node.js
@@ -30,7 +30,7 @@ This example should show how to get items out of the cluster
 
 [C](c/retrieving.cc) |
 [Python](python/retrieving.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/Retrieving.java) |
 .NET |
 Go |
 node.js
@@ -40,7 +40,7 @@ This example should show how to initialize and update a counter
 
 [C](c/counter.cc) |
 [Python](python/counter.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/Counter.java) |
 .NET |
 Go |
 node.js
@@ -55,7 +55,7 @@ query = N1QLQuery('SELECT airportname, city, country FROM `travel-sample` '
 
 [C](c/query-criteria.cc) |
 [Python](python/query-criteria.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/QueryCriteria.java) |
 .NET |
 Go |
 node.js
@@ -66,7 +66,7 @@ This example should demonstrate how to use placeholders, and also the advantages
 
 [C](c/query-placeholders.cc) |
 [Python](python/query-placeholders.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/QueryPlaceholders.java) |
 .NET |
 Go |
 node.js
