@@ -21,7 +21,7 @@ func main() {
     }
 
   // Create a document
-   key := "goDevguideExampleRetrieve"
+   key := "goDevguideExampleUpdate"
    val := "Retrieve Test Value"
    _,err = bucket.Upsert(key,&val, 0)
   if err != nil{
