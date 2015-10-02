@@ -13,7 +13,7 @@ This example should show how to connect to a remote Couchbase cluster and bucket
 [Java](java/src/main/java/com/couchbase/devguide/ConnectionBase.java)|
 .NET |
 [Go](go/connecting.go) |
-node.js
+[node.js](nodejs/connecting.js)
 
 ### Updating/Storing
 This example should show how to store an item into a cluster
@@ -23,7 +23,7 @@ This example should show how to store an item into a cluster
 [Java](java/src/main/java/com/couchbase/devguide/Updating.java) |
 .NET |
 [Go](go/updating.go) |
-node.js
+[node.js](nodejs/updating.js)
 
 ### Retrieving
 This example should show how to get items out of the cluster
@@ -33,7 +33,7 @@ This example should show how to get items out of the cluster
 [Java](java/src/main/java/com/couchbase/devguide/Retrieving.java) |
 .NET |
 [Go](go/retrieving.go) |
-node.js
+[node.js](nodejs/retrieving.js)
 
 ### Counter
 This example should show how to initialize and update a counter
@@ -43,7 +43,17 @@ This example should show how to initialize and update a counter
 [Java](java/src/main/java/com/couchbase/devguide/Counter.java) |
 .NET |
 [Go](go/counter.go) |
-node.js
+[node.js](nodejs/counter.js)
+
+### Expiry
+This example should show how to initialize a document with an Expiry or "ttl" - time to live
+
+[C](c/expiration.cc) |
+[Python](python/expiration.py) |
+[Java](java/src/main/java/com/couchbase/devguide/expiration.java) |
+.NET |
+[Go](go/expiration.go) |
+[node.js](nodejs/expiration.js)
 
 ### Query with criteria
 This example should show how to perform a simple query against the travel-sample bucket. The query is something like:
@@ -58,7 +68,7 @@ query = N1QLQuery('SELECT airportname, city, country FROM `travel-sample` '
 [Java](java/src/main/java/com/couchbase/devguide/QueryCriteria.java) |
 .NET |
 [Go](go/query-criteria.go) |
-node.js
+[node.js](nodejs/query-criteria.js)
 
 
 ### Query with placeholders
@@ -69,4 +79,4 @@ This example should demonstrate how to use placeholders, and also the advantages
 [Java](java/src/main/java/com/couchbase/devguide/QueryPlaceholders.java) |
 .NET |
 [Go](go/query-placeholders.go) |
-node.js
+[node.js](nodejs/query-placeholders.js)
