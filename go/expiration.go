@@ -52,7 +52,7 @@ func main() {
   if err != nil{
       fmt.Println("ERRROR CREATING DOCUMENT:",err)
     }
-    
+
   // Add an expiry
   _,err = bucket.Touch(key,0,2)
   if err != nil{
@@ -76,5 +76,5 @@ func main() {
     }
 
   // Exiting
-  fmt.Println("Example Succesful - Exiting")
+  fmt.Println("Example Successful - Exiting")
 }

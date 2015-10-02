@@ -35,5 +35,5 @@ func main() {
     }
 
   // Exiting
-  fmt.Println("Example Succesful - Exiting")
+  fmt.Println("Example Successful - Exiting")
 }

@@ -42,5 +42,5 @@ func main() {
   fmt.Println("Incremented Counter:",curKeyValue)
 
   // Exiting
-  fmt.Println("Example Succesful - Exiting")
+  fmt.Println("Example Successful - Exiting")
 }

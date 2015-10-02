@@ -53,5 +53,5 @@ func main() {
  fmt.Println("Document Retrieved:",retValue)
 
   // Exiting
-  fmt.Println("Example Succesful - Exiting")
+  fmt.Println("Example Successful  - Exiting")
 }

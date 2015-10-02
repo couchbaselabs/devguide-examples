@@ -19,5 +19,5 @@ func main() {
   if err != nil{
       fmt.Println("ERRROR OPENING BUCKET:",err)
     }
-  fmt.Println("Example Succesful - Exiting")
+  fmt.Println("Example Successful - Exiting")
 }
