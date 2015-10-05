@@ -80,3 +80,26 @@ This example should demonstrate how to use placeholders, and also the advantages
 .NET |
 [Go](go/query-placeholders.go) |
 [node.js](nodejs/query-placeholders.js)
+
+### Query - Ensuring all documents are the latest (scan consistency)
+This example should show how the `scan_consistency` parameter may be enabled for a specific query.
+
+[C](c/query-consistency.cc) |
+[Python](python/query-consistency.py) |
+Java |
+.NET |
+Go |
+node.js
+
+### CAS Handling - Using CAS for concurrent mutations
+This example will demonstrate concurrent mutations with and without using the
+CAS value. Without using the CAS value, some modifications may end up getting
+lost, whereas using the CAS within a proper retry mechanism will ensure that
+all mutations remain in tact
+
+[C](c/cas.cc) |
+[Python](python/cas.py) |
+Java |
+.NET |
+Go |
+node.js

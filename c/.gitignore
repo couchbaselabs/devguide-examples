@@ -6,4 +6,6 @@ expiration
 query-placeholders
 query-create-index
 query-criteria
+query-consistency
+cas
 *.dSYM
