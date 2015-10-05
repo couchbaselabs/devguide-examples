@@ -103,3 +103,16 @@ Java |
 .NET |
 Go |
 node.js
+
+### Durability
+Shows storing an item with durability requirements, attempting to persist/replicate
+to the maximum number of nodes available.
+
+Some SDKs provide APIs to determine how many nodes are in the cluster, while some SDKs allow dynamically persisting to the total number of nodes available, while others only allow fixed numbers. More details may be found in the examples.
+
+[C](c/durability.cc) |
+[Python](python/durability.py) |
+Java |
+.NET |
+Go |
+node.js

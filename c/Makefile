@@ -1,6 +1,6 @@
 PROGS=connecting updating retrieving query-create-index query-criteria \
 	  query-placeholders counter expiration \
-	  query-consistency cas
+	  query-consistency cas durability
 
 all: $(PROGS)
 

@@ -8,4 +8,5 @@ query-create-index
 query-criteria
 query-consistency
 cas
+durability
 *.dSYM
