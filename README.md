@@ -50,7 +50,7 @@ This example should show how to initialize a document with an Expiry or "ttl" - 
 
 [C](c/expiration.cc) |
 [Python](python/expiration.py) |
-[Java](java/src/main/java/com/couchbase/devguide/expiration.java) |
+[Java](java/src/main/java/com/couchbase/devguide/Expiration.java) |
 .NET |
 [Go](go/expiration.go) |
 [node.js](nodejs/expiration.js)
