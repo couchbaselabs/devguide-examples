@@ -38,8 +38,8 @@ This example should show how to get items out of the cluster
 ### Bulk Storing
 This example should show how to store items into a cluster using the Bulk API
 
-[C] |
-[Python] |
+[C](c/bulk-store.cc) |
+[Python](python/bulk-operations.py) |
 [Java] |
 .NET |
 [Go](go/bulk-insert.go) |
@@ -48,8 +48,8 @@ This example should show how to store items into a cluster using the Bulk API
 ### Bulk Retrieving
 This example should show how to get items out of the cluster using the Bulk API
 
-[C] |
-[Python] |
+[C](c/bulk-get.cc) |
+[Python](python/bulk-operations.py) |
 [Java] |
 .NET |
 [Go](go/bulk-get.go) |
