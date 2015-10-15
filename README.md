@@ -35,6 +35,26 @@ This example should show how to get items out of the cluster
 [Go](go/retrieving.go) |
 [node.js](nodejs/retrieving.js)
 
+### Bulk Storing
+This example should show how to store items into a cluster using the Bulk API
+
+[C] |
+[Python] |
+[Java] |
+.NET |
+[Go](go/bulk-insert.go) |
+[node.js]
+
+### Bulk Retrieving
+This example should show how to get items out of the cluster using the Bulk API
+
+[C] |
+[Python] |
+[Java] |
+.NET |
+[Go](go/bulk-get.go) |
+[node.js]
+
 ### Counter
 This example should show how to initialize and update a counter
 
