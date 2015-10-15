@@ -86,7 +86,7 @@ This example should show how the `scan_consistency` parameter may be enabled for
 
 [C](c/query-consistency.cc) |
 [Python](python/query-consistency.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/QueryConsistency.java) |
 .NET |
 Go |
 node.js
@@ -99,7 +99,7 @@ all mutations remain in tact
 
 [C](c/cas.cc) |
 [Python](python/cas.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/Cas.java) |
 .NET |
 Go |
 node.js
@@ -112,7 +112,7 @@ Some SDKs provide APIs to determine how many nodes are in the cluster, while som
 
 [C](c/durability.cc) |
 [Python](python/durability.py) |
-Java |
+[Java](java/src/main/java/com/couchbase/devguide/Durability.java) |
 .NET |
 Go |
 node.js
