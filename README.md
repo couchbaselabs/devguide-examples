@@ -40,7 +40,7 @@ This example should show how to store items into a cluster using the Bulk API
 
 [C](c/bulk-store.cc) |
 [Python](python/bulk-operations.py) |
-[Java] |
+[Java](java/src/main/java/com/couchbase/devguide/BulkInsert.java) |
 .NET |
 [Go](go/bulk-insert.go) |
 [node.js]
@@ -50,7 +50,7 @@ This example should show how to get items out of the cluster using the Bulk API
 
 [C](c/bulk-get.cc) |
 [Python](python/bulk-operations.py) |
-[Java] |
+[Java](java/src/main/java/com/couchbase/devguide/BulkGet.java) |
 .NET |
 [Go](go/bulk-get.go) |
 [node.js]
