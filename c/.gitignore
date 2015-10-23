@@ -11,4 +11,5 @@ cas
 durability
 bulk-get
 bulk-store
+connecting-ssl
 *.dSYM

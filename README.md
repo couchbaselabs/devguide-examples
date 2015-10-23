@@ -15,6 +15,19 @@ This example should show how to connect to a remote Couchbase cluster and bucket
 [Go](go/connecting.go) |
 [node.js](nodejs/connecting.js)
 
+### SSL Connection
+This example shows how to connect using the server's SSL certificate which has
+already been downloaded locally to the SDK host. The C-based examples will
+refer to this path when connecting, while the other SDKs will refer to a
+specific store and possibly have the example divided into installing and using
+the certificate.
+
+[C](c/connecting-ssl.c) |
+[Python](python/connecting-ssl.py) |
+.NET |
+Go |
+node.js
+
 ### Updating/Storing
 This example should show how to store an item into a cluster
 
