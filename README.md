@@ -149,3 +149,8 @@ Some SDKs provide APIs to determine how many nodes are in the cluster, while som
 .NET |
 Go |
 node.js
+
+### Utils
+Utilities functions.
+
+[Go] (go/utils.go)
