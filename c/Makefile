@@ -10,4 +10,4 @@ clean:
 	rm -rf *.dSYM
 
 CPPFLAGS=-Wall -g
-LDFLAGS=-lcouchbase
+LDLIBS=-lcouchbase
