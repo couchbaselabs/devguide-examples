@@ -9,4 +9,7 @@ query-criteria
 query-consistency
 cas
 durability
+bulk-get
+bulk-store
+connecting-ssl
 *.dSYM

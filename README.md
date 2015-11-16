@@ -15,6 +15,19 @@ This example should show how to connect to a remote Couchbase cluster and bucket
 [Go](go/connecting.go) |
 [node.js](nodejs/connecting.js)
 
+### SSL Connection
+This example shows how to connect using the server's SSL certificate which has
+already been downloaded locally to the SDK host. The C-based examples will
+refer to this path when connecting, while the other SDKs will refer to a
+specific store and possibly have the example divided into installing and using
+the certificate.
+
+[C](c/connecting-ssl.c) |
+[Python](python/connecting-ssl.py) |
+.NET |
+Go |
+node.js
+
 ### Updating/Storing
 This example should show how to store an item into a cluster
 
@@ -38,9 +51,9 @@ This example should show how to get items out of the cluster
 ### Bulk Storing
 This example should show how to store items into a cluster using the Bulk API
 
-[C] |
-[Python] |
-[Java] |
+[C](c/bulk-store.cc) |
+[Python](python/bulk-operations.py) |
+[Java](java/src/main/java/com/couchbase/devguide/BulkInsert.java) |
 .NET |
 [Go](go/bulk-insert.go) |
 [node.js]
@@ -48,9 +61,9 @@ This example should show how to store items into a cluster using the Bulk API
 ### Bulk Retrieving
 This example should show how to get items out of the cluster using the Bulk API
 
-[C] |
-[Python] |
-[Java] |
+[C](c/bulk-get.cc) |
+[Python](python/bulk-operations.py) |
+[Java](java/src/main/java/com/couchbase/devguide/BulkGet.java) |
 .NET |
 [Go](go/bulk-get.go) |
 [node.js]
