@@ -124,6 +124,16 @@ This example should show how the `scan_consistency` parameter may be enabled for
 Go |
 node.js
 
+### Query - Better reuse of queries with adhoc(false) and Prepared Statements
+This example should demonstrate best practice when a statement is to be reused heavily. Setting the `adhoc` N1QL query tuning to `false` will use Prepared Statements in the background, which is useful in such a case. Note how this works with placeholders (but of course simple statements work too).
+
+C |
+Python |
+[Java](java/src/main/java/com/couchbase/devguide/QueryPrepared.java) |
+.NET |
+Go |
+node.js
+
 ### CAS Handling - Using CAS for concurrent mutations
 This example will demonstrate concurrent mutations with and without using the
 CAS value. Without using the CAS value, some modifications may end up getting
