@@ -147,6 +147,7 @@ func main() {
 	}
 
 	// Inbound http handlers
+	http.Handle("/", http.FileServer(http.Dir("./public")))
 	http.HandleFunc("/api/query/untyped", queryUntyped)
 	http.HandleFunc("/api/query/typed", queryTyped)
 	http.HandleFunc("/api/query/one", queryOne)
