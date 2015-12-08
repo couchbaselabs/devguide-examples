@@ -105,7 +105,10 @@ query = N1QLQuery('SELECT airportname, city, country FROM `travel-sample` '
 
 
 ### Query with placeholders
-This example should demonstrate how to use placeholders, and also the advantages they afford, perhaps by abstracting a given query away as a function, and passing a function parameter down as a query parameter
+This example should demonstrate how to use placeholders, and also the advantages they afford, perhaps by abstracting a given query away as a function, and passing a function parameter down as a query parameter.
+
+This example should also demonstrate in a *commented* section of code how to
+optimize this query.
 
 [C](c/query-placeholders.cc) |
 [Python](python/query-placeholders.py) |
