@@ -11,6 +11,14 @@ cb = Bucket('couchbase://10.0.0.31/travel-sample')
 def query_city(bkt, city):
     query = N1QLQuery('SELECT airportname FROM `travel-sample` '
                       'WHERE city=$1 AND type="airport"', city)
+
+    # Uncomment the following line to make the query optimized for
+    # repeated invocations.
+    # The query string is compiled, and the the compiled form is
+    # stored in the client (as a dictionary value to the query string
+    # itself).
+    #
+    # q.adhoc = False
     return bkt.n1ql_query(query)
 
 

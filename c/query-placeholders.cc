@@ -69,6 +69,11 @@ query_city(lcb_t instance, const char *city)
 
     cmd.callback = query_callback;
 
+    // To enable using prepared (optimized) statements, you can use
+    // the LCB_CMDN1QL_F_PREPCACHE flag. This is equivalent to setting
+    // 'adhoc=False' in other SDKs
+    cmd.cmdflags |= LCB_CMDN1QL_F_PREPCACHE;
+
     rc = lcb_n1p_mkcmd(params, &cmd);
     rc = lcb_n1ql_query(instance, &rows, &cmd);
     lcb_wait(instance);
