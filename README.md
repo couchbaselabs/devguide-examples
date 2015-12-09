@@ -137,6 +137,18 @@ Python |
 Go |
 node.js
 
+### Query - UPDATE and DELETE
+
+Show how these statements can be used to modify existing documents using
+secondary document attributes. Also show how a single document can be
+modified via the `USE KEYS` clause.
+
+C |
+[Python](python/n1ql-update-delete.py)
+| .NET |
+Go |
+node.js
+
 ### CAS Handling - Using CAS for concurrent mutations
 This example will demonstrate concurrent mutations with and without using the
 CAS value. Without using the CAS value, some modifications may end up getting
