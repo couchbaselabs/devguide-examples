@@ -31,8 +31,7 @@ func main() {
 	val := "Durabilty PersistTo Test Value"
 	_, err = bucket.UpsertDura(key, &val, 0, 0, 1)
 	if err != nil {
-		fmt.Println("DURABILITY Persist Example:", err)
-		fmt.Println("ERRROR CREATING DOCUMENT:", err)
+		fmt.Println("ERROR, DURABILITY Persist Example:", err)
 	}
 
 	// Retrieve Value Persist To
@@ -53,8 +52,7 @@ func main() {
 	val = "Durabilty ReplicateTo Test Value"
 	_, err = bucket.UpsertDura(key, &val, 0, 1, 0)
 	if err != nil {
-		fmt.Println("DURABILITY Replicate Example:", err)
-		fmt.Println("ERRROR CREATING DOCUMENT:", err)
+		fmt.Println("ERROR, DURABILITY Replicate Example:", err)
 	}
 
 	// Retrieve Value Replicate To
@@ -73,15 +71,14 @@ func main() {
 	//   NOTICE the function signature:
 	//      Bucket.UpsertDura(key, value, expiry, _REPLICATE_TO_, _PERSIST_TO_)
 
-	key = "goDevguideExamplePersistToAndReplicateTo"
-	val = "Durabilty PersistTo and ReplicateTo Test Value"
+	key = "goDevguideExampleReplicateToAndPersistTo"
+	val = "Durabilty ReplicateTo and PersistTo Test Value"
 	_, err = bucket.UpsertDura(key, &val, 0, 1, 1)
 	if err != nil {
-		fmt.Println("DURABILITY Persist and Replicate Example:", err)
-		fmt.Println("ERRROR CREATING DOCUMENT:", err)
+		fmt.Println("ERROR, DURABILITY Replicate and Persist Example:", err)
 	}
 
-	// Retrieve Value Replicate To
+	// Retrieve Value Replicate To and Persist To
 	// Should succeed even if durability fails, as the document was
 	// still written.
 	_, err = bucket.Get(key, &retValue)
