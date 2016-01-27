@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DevGuide
 {
-    public class Retrieving : ConnectionBase
+    public class Retrieve : ConnectionBase
     {
         public override async Task ExecuteAsync()
         {
-            var key = "dotnetDevguideExampleRetrieving-" + DateTime.Now.Ticks;
+            var key = "dotnetDevguideExampleRetrieve-" + DateTime.Now.Ticks;
             var data = new Data
             {
                 Number = 42,
@@ -46,7 +46,7 @@ namespace DevGuide
 
         static void Main(string[] args)
         {
-            new Retrieving().ExecuteAsync().Wait();
+            new Retrieve().ExecuteAsync().Wait();
         }
     }
 }

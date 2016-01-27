@@ -34,7 +34,7 @@ This example should show how to store an item into a cluster
 [C](c/updating.c) |
 [Python](python/updating.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Updating.java) |
-[.NET](dotnet/Updating.cs) |
+[.NET](dotnet/Update.cs) |
 [Go](go/updating.go) |
 [node.js](nodejs/updating.js)
 
@@ -44,7 +44,7 @@ This example should show how to get items out of the cluster
 [C](c/retrieving.cc) |
 [Python](python/retrieving.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Retrieving.java) |
-[.NET](dotnet/Retrieving.cs) |
+[.NET](dotnet/Retrieve.cs) |
 [Go](go/retrieving.go) |
 [node.js](nodejs/retrieving.js)
 
@@ -54,7 +54,7 @@ This example should show how to store items into a cluster using the Bulk API
 [C](c/bulk-store.cc) |
 [Python](python/bulk-operations.py) |
 [Java](java/src/main/java/com/couchbase/devguide/BulkInsert.java) |
-.NET |
+[.NET](dotnet/BulkInsert.cs) |
 [Go](go/bulk-insert.go) |
 [node.js]
 
@@ -64,7 +64,7 @@ This example should show how to get items out of the cluster using the Bulk API
 [C](c/bulk-get.cc) |
 [Python](python/bulk-operations.py) |
 [Java](java/src/main/java/com/couchbase/devguide/BulkGet.java) |
-.NET |
+[.NET](dotnet/BulkGet.cs) |
 [Go](go/bulk-get.go) |
 [node.js]
 

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DevGuide
 {
-    public class Updating : ConnectionBase
+    public class Update : ConnectionBase
     {
         public override async Task ExecuteAsync()
         {
-            var key = "dotnetDevguideExampleUpdating-" + DateTime.Now.Ticks;
+            var key = "dotnetDevguideExampleUpdate-" + DateTime.Now.Ticks;
             var data = new Data
             {
                 Number = 42,
@@ -47,7 +47,7 @@ namespace DevGuide
 
         static void Main(string[] args)
         {
-            new Updating().ExecuteAsync().Wait();
+            new Update().ExecuteAsync().Wait();
         }
     }
 }

@@ -19,8 +19,10 @@ namespace DevGuide
         {
             await new ConnectionBase().ExecuteAsync();
             await new ConnectionConfig().ExecuteAsync();
-            await new Retrieving().ExecuteAsync();
-            await new Updating().ExecuteAsync();
+            await new Retrieve().ExecuteAsync();
+            await new Update().ExecuteAsync();
+            await new BulkInsert().ExecuteAsync();
+            await new BulkGet().ExecuteAsync();
         }
     }
 }
