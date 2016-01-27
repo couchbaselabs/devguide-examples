@@ -11,7 +11,7 @@ This example should show how to connect to a remote Couchbase cluster and bucket
 [C](c/connecting.c) |
 [Python](python/connecting.py) |
 [Java](java/src/main/java/com/couchbase/devguide/ConnectionBase.java)|
-.NET |
+[.NET](dotnet/ConnectionBase.cs) |
 [Go](go/connecting.go) |
 [node.js](nodejs/connecting.js)
 
@@ -34,7 +34,7 @@ This example should show how to store an item into a cluster
 [C](c/updating.c) |
 [Python](python/updating.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Updating.java) |
-.NET |
+[.NET](dotnet/Updating.cs) |
 [Go](go/updating.go) |
 [node.js](nodejs/updating.js)
 
@@ -44,7 +44,7 @@ This example should show how to get items out of the cluster
 [C](c/retrieving.cc) |
 [Python](python/retrieving.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Retrieving.java) |
-.NET |
+[.NET](dotnet/Retrieving.cs) |
 [Go](go/retrieving.go) |
 [node.js](nodejs/retrieving.js)
 

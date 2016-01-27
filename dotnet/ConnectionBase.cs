@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace DevGuide
 {
+    /// <summary>
+    /// For an example of configuring the Couchbase connection through App.config/Web.config
+    /// see the ConnectionConfig class
+    /// </summary>
     public class ConnectionBase
     {
         protected ICluster _cluster;
