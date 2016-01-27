@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>DevGuide.Program</StartupObject>
+    <StartupObject>DevGuide.Expiration</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.1.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
@@ -64,11 +64,13 @@
   <ItemGroup>
     <Compile Include="ConnectionConfig.cs" />
     <Compile Include="ConnectionBase.cs" />
+    <Compile Include="Expiration.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BulkInsert.cs" />
     <Compile Include="BulkGet.cs" />
+    <Compile Include="Counter.cs" />
     <Compile Include="Update.cs" />
     <Compile Include="Retrieve.cs" />
   </ItemGroup>
