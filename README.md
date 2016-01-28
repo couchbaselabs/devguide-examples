@@ -11,7 +11,7 @@ This example should show how to connect to a remote Couchbase cluster and bucket
 [C](c/connecting.c) |
 [Python](python/connecting.py) |
 [Java](java/src/main/java/com/couchbase/devguide/ConnectionBase.java)|
-.NET |
+[.NET](dotnet/ConnectionBase.cs) |
 [Go](go/connecting.go) |
 [node.js](nodejs/connecting.js)
 
@@ -34,7 +34,7 @@ This example should show how to store an item into a cluster
 [C](c/updating.c) |
 [Python](python/updating.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Updating.java) |
-.NET |
+[.NET](dotnet/Update.cs) |
 [Go](go/updating.go) |
 [node.js](nodejs/updating.js)
 
@@ -44,7 +44,7 @@ This example should show how to get items out of the cluster
 [C](c/retrieving.cc) |
 [Python](python/retrieving.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Retrieving.java) |
-.NET |
+[.NET](dotnet/Retrieve.cs) |
 [Go](go/retrieving.go) |
 [node.js](nodejs/retrieving.js)
 
@@ -54,7 +54,7 @@ This example should show how to store items into a cluster using the Bulk API
 [C](c/bulk-store.cc) |
 [Python](python/bulk-operations.py) |
 [Java](java/src/main/java/com/couchbase/devguide/BulkInsert.java) |
-.NET |
+[.NET](dotnet/BulkInsert.cs) |
 [Go](go/bulk-insert.go) |
 [node.js]
 
@@ -64,7 +64,7 @@ This example should show how to get items out of the cluster using the Bulk API
 [C](c/bulk-get.cc) |
 [Python](python/bulk-operations.py) |
 [Java](java/src/main/java/com/couchbase/devguide/BulkGet.java) |
-.NET |
+[.NET](dotnet/BulkGet.cs) |
 [Go](go/bulk-get.go) |
 [node.js]
 
@@ -74,7 +74,7 @@ This example should show how to initialize and update a counter
 [C](c/counter.cc) |
 [Python](python/counter.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Counter.java) |
-.NET |
+[.NET](dotnet/Counter.cs) |
 [Go](go/counter.go) |
 [node.js](nodejs/counter.js)
 
@@ -84,7 +84,7 @@ This example should show how to initialize a document with an Expiry or "ttl" - 
 [C](c/expiration.cc) |
 [Python](python/expiration.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Expiration.java) |
-.NET |
+[.NET](dotnet/Expiration.cs) |
 [Go](go/expiration.go) |
 [node.js](nodejs/expiration.js)
 
@@ -158,7 +158,7 @@ all mutations remain in tact
 [C](c/cas.cc) |
 [Python](python/cas.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Cas.java) |
-.NET |
+[.NET](dotnet/Cas.cs) |
 Go |
 node.js
 
@@ -171,6 +171,6 @@ Some SDKs provide APIs to determine how many nodes are in the cluster, while som
 [C](c/durability.cc) |
 [Python](python/durability.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Durability.java) |
-.NET |
+[.NET](dotnet/Durability.cs) |
 Go |
 node.js
