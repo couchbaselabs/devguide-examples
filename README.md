@@ -74,7 +74,7 @@ This example should show how to initialize and update a counter
 [C](c/counter.cc) |
 [Python](python/counter.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Counter.java) |
-.NET |
+[.NET](dotnet/Counter.cs) |
 [Go](go/counter.go) |
 [node.js](nodejs/counter.js)
 
@@ -84,7 +84,7 @@ This example should show how to initialize a document with an Expiry or "ttl" - 
 [C](c/expiration.cc) |
 [Python](python/expiration.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Expiration.java) |
-.NET |
+[.NET](dotnet/Expiration.cs) |
 [Go](go/expiration.go) |
 [node.js](nodejs/expiration.js)
 
@@ -158,7 +158,7 @@ all mutations remain in tact
 [C](c/cas.cc) |
 [Python](python/cas.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Cas.java) |
-.NET |
+[.NET](dotnet/Cas.cs) |
 Go |
 node.js
 
@@ -171,6 +171,6 @@ Some SDKs provide APIs to determine how many nodes are in the cluster, while som
 [C](c/durability.cc) |
 [Python](python/durability.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Durability.java) |
-.NET |
+[.NET](dotnet/Durability.cs) |
 Go |
 node.js
