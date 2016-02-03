@@ -24,6 +24,7 @@ the certificate.
 
 [C](c/connecting-ssl.c) |
 [Python](python/connecting-ssl.py) |
+[Java](java/src/main/java/com/couchbase/devguide/ConnectingSsl.java) |
 .NET |
 Go |
 node.js
