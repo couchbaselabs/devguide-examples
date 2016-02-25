@@ -22,7 +22,7 @@ func main() {
 		fmt.Println("ERRROR CONNECTING TO CLUSTER:", err)
 	}
 	// Open Bucket
-	bucket, err = cluster.OpenBucket("default", "")
+	bucket, err = cluster.OpenBucket("travel-sample", "")
 	if err != nil {
 		fmt.Println("ERRROR OPENING BUCKET:", err)
 	}
