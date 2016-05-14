@@ -1,3 +1,6 @@
+// This is a Couchbase subdoc api example written using ES6 features.  Please
+//  ensure the version of nodejs installed in your environment is using at
+//  at least version
 'use strict';
 
 // Require Couchbase Module
@@ -12,7 +15,9 @@ var bucket = cluster.openBucket('travel-sample');
 // Key for example
 var key = "nodeDevguideExampleSubdoc";
 
-storeInitial()
+// Run the example
+verifyNodejsVersion()
+    .then(storeInitial)
     .then(lookupEntireDocument)
     .then(subdocItemLookupTwoFields)
     .then(subdocArrayAdd)
@@ -26,8 +31,22 @@ storeInitial()
     })
     .catch((err) => {
         console.log("ERR:", err)
+        process.exit(0);
     });
-
+    
+function verifyNodejsVersion() {
+    return new Promise(
+        (resolve, reject) => {
+            if (parseInt(((process.version).split("v"))[1].substr(0, 1)) < 4) {
+                console.log("\n  The nodejs version is too low.  This application requires\n" +
+                    "  ES6 features, specifically: \n" +
+                    "    --promises \n    --arrow functions \n" +
+                    "  Please upgrade the nodejs version from:\n    --Current " +
+                    process.version + "\n    --Minimum:4.0.0");
+                reject();
+            } else resolve();
+        });
+}
 
 function storeInitial() {
     return new Promise((resolve, reject) => {
