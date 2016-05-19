@@ -13,7 +13,8 @@ This example should show how to connect to a remote Couchbase cluster and bucket
 [Java](java/src/main/java/com/couchbase/devguide/ConnectionBase.java)|
 [.NET](dotnet/ConnectionBase.cs) |
 [Go](go/connecting.go) |
-[node.js](nodejs/connecting.js)
+[node.js](nodejs/connecting.js) |
+[PHP](php/connecting.php)
 
 ### SSL Connection
 This example shows how to connect using the server's SSL certificate which has
@@ -27,7 +28,8 @@ the certificate.
 [Java](java/src/main/java/com/couchbase/devguide/ConnectingSsl.java) |
 .NET |
 Go |
-node.js
+node.js |
+[PHP](connecting-ssl.php) (currently crashes!)
 
 ### Updating/Storing
 This example should show how to store an item into a cluster
@@ -37,7 +39,8 @@ This example should show how to store an item into a cluster
 [Java](java/src/main/java/com/couchbase/devguide/Updating.java) |
 [.NET](dotnet/Update.cs) |
 [Go](go/updating.go) |
-[node.js](nodejs/updating.js)
+[node.js](nodejs/updating.js) |
+[PHP](php/updating.php)
 
 ### Retrieving
 This example should show how to get items out of the cluster
@@ -47,7 +50,8 @@ This example should show how to get items out of the cluster
 [Java](java/src/main/java/com/couchbase/devguide/Retrieving.java) |
 [.NET](dotnet/Retrieve.cs) |
 [Go](go/retrieving.go) |
-[node.js](nodejs/retrieving.js)
+[node.js](nodejs/retrieving.js) |
+[PHP](php/retrieving.php)
 
 ### Bulk Storing
 This example should show how to store items into a cluster using the Bulk API
@@ -57,7 +61,8 @@ This example should show how to store items into a cluster using the Bulk API
 [Java](java/src/main/java/com/couchbase/devguide/BulkInsert.java) |
 [.NET](dotnet/BulkInsert.cs) |
 [Go](go/bulk-insert.go) |
-[node.js]
+node.js (N/A) |
+[PHP](php/bulk-operations.php)
 
 ### Bulk Retrieving
 This example should show how to get items out of the cluster using the Bulk API
@@ -67,7 +72,8 @@ This example should show how to get items out of the cluster using the Bulk API
 [Java](java/src/main/java/com/couchbase/devguide/BulkGet.java) |
 [.NET](dotnet/BulkGet.cs) |
 [Go](go/bulk-get.go) |
-[node.js]
+node.js (N/A) |
+[PHP](php/bulk-operations.php)
 
 ### Counter
 This example should show how to initialize and update a counter
@@ -77,7 +83,8 @@ This example should show how to initialize and update a counter
 [Java](java/src/main/java/com/couchbase/devguide/Counter.java) |
 [.NET](dotnet/Counter.cs) |
 [Go](go/counter.go) |
-[node.js](nodejs/counter.js)
+[node.js](nodejs/counter.js) |
+[PHP](php/counter.php)
 
 ### Expiry
 This example should show how to initialize a document with an Expiry or "ttl" - time to live
@@ -87,7 +94,8 @@ This example should show how to initialize a document with an Expiry or "ttl" - 
 [Java](java/src/main/java/com/couchbase/devguide/Expiration.java) |
 [.NET](dotnet/Expiration.cs) |
 [Go](go/expiration.go) |
-[node.js](nodejs/expiration.js)
+[node.js](nodejs/expiration.js) |
+[PHP](php/expiration.php)
 
 ### Query with criteria
 This example should show how to perform a simple query against the travel-sample bucket. The query is something like:
@@ -102,7 +110,8 @@ query = N1QLQuery('SELECT airportname, city, country FROM `travel-sample` '
 [Java](java/src/main/java/com/couchbase/devguide/QueryCriteria.java) |
 .NET |
 [Go](go/query-criteria.go) |
-[node.js](nodejs/query-criteria.js)
+[node.js](nodejs/query-criteria.js) |
+[PHP](php/query-criteria.php)
 
 
 ### Query with placeholders
@@ -116,7 +125,8 @@ optimize this query.
 [Java](java/src/main/java/com/couchbase/devguide/QueryPlaceholders.java) |
 .NET |
 [Go](go/query-placeholders.go) |
-[node.js](nodejs/query-placeholders.js)
+[node.js](nodejs/query-placeholders.js) |
+[PHP](php/query-placeholders.php)
 
 ### Query - Ensuring all documents are the latest (scan consistency)
 This example should show how the `scan_consistency` parameter may be enabled for a specific query.
@@ -126,7 +136,8 @@ This example should show how the `scan_consistency` parameter may be enabled for
 [Java](java/src/main/java/com/couchbase/devguide/QueryConsistency.java) |
 .NET |
 Go |
-node.js
+node.js |
+[PHP](php/query-consistency.php)
 
 ### Query - Better reuse of queries with adhoc(false) and Prepared Statements
 This example should demonstrate best practice when a statement is to be reused heavily. Setting the `adhoc` N1QL query tuning to `false` will use Prepared Statements in the background, which is useful in such a case. Note how this works with placeholders (but of course simple statements work too).
@@ -161,7 +172,8 @@ all mutations remain in tact
 [Java](java/src/main/java/com/couchbase/devguide/Cas.java) |
 [.NET](dotnet/Cas.cs) |
 Go |
-node.js
+node.js |
+[PHP](php/cas.php)
 
 ### Durability
 Shows storing an item with durability requirements, attempting to persist/replicate
@@ -174,4 +186,5 @@ Some SDKs provide APIs to determine how many nodes are in the cluster, while som
 [Java](java/src/main/java/com/couchbase/devguide/Durability.java) |
 [.NET](dotnet/Durability.cs) |
 Go |
-node.js
+node.js |
+PHP
