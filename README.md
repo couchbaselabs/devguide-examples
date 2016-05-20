@@ -13,6 +13,27 @@ version (and if required, by an SDK-specific sub-series within them).
 The `server-4.5` branch should be used for documentation content related
 to Couchbase Server 4.5, and so on.
 
+Table of Contents
+=================
+
+  * [Developer Guide Examples](#developer-guide-examples)
+    * [How to use these examples](#how-to-use-these-examples)
+      * [Basic Connection](#basic-connection)
+      * [SSL Connection](#ssl-connection)
+      * [Updating/Storing](#updatingstoring)
+      * [Retrieving](#retrieving)
+      * [Bulk Storing](#bulk-storing)
+      * [Bulk Retrieving](#bulk-retrieving)
+      * [Counter](#counter)
+      * [Expiry](#expiry)
+      * [Query with criteria](#query-with-criteria)
+      * [Query with placeholders](#query-with-placeholders)
+      * [Query \- Ensuring all documents are the latest (scan consistency)](#query---ensuring-all-documents-are-the-latest-scan-consistency)
+      * [Query \- Better reuse of queries with adhoc(false) and Prepared Statements](#query---better-reuse-of-queries-with-adhocfalse-and-prepared-statements)
+      * [Query \- UPDATE and DELETE](#query---update-and-delete)
+      * [CAS Handling \- Using CAS for concurrent mutations](#cas-handling---using-cas-for-concurrent-mutations)
+      * [Durability](#durability)
+
 ### Basic Connection
 This example should show how to connect to a remote Couchbase cluster and bucket
 
