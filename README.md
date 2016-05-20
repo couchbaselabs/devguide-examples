@@ -5,6 +5,14 @@ They are currently cross-referenced by language.
 
 Each example should be fully self-contained and executable. For languages which have a significant setup, the example may be split into multiple files, but should still be executable. Error handling is optional but should be be at least hinted at.
 
+## How to use these examples
+
+The examples are versioned by the features introduced in a given server
+version (and if required, by an SDK-specific sub-series within them).
+
+The `server-4.5` branch should be used for documentation content related
+to Couchbase Server 4.5, and so on.
+
 ### Basic Connection
 This example should show how to connect to a remote Couchbase cluster and bucket
 
