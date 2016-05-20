@@ -5,7 +5,7 @@ They are currently cross-referenced by language.
 
 Each example should be fully self-contained and executable. For languages which have a significant setup, the example may be split into multiple files, but should still be executable. Error handling is optional but should be be at least hinted at.
 
-## How to use these examples
+### How to use these examples
 
 The examples are versioned by the features introduced in a given server
 version (and if required, by an SDK-specific sub-series within them).
@@ -13,26 +13,36 @@ version (and if required, by an SDK-specific sub-series within them).
 The `server-4.5` branch should be used for documentation content related
 to Couchbase Server 4.5, and so on.
 
+
 Table of Contents
 =================
 
   * [Developer Guide Examples](#developer-guide-examples)
-    * [How to use these examples](#how-to-use-these-examples)
+      * [How to use these examples](#how-to-use-these-examples)
+    * [Connecting to Couchbase](#connecting-to-couchbase)
       * [Basic Connection](#basic-connection)
       * [SSL Connection](#ssl-connection)
+    * [Basic Document/KV Operations](#basic-documentkv-operations)
       * [Updating/Storing](#updatingstoring)
       * [Retrieving](#retrieving)
+    * [Advanced Document/KV Operations](#advanced-documentkv-operations)
       * [Bulk Storing](#bulk-storing)
       * [Bulk Retrieving](#bulk-retrieving)
       * [Counter](#counter)
       * [Expiry](#expiry)
+      * [CAS Handling \- Using CAS for concurrent mutations](#cas-handling---using-cas-for-concurrent-mutations)
+      * [Durability](#durability)
+    * [N1QL Queries](#n1ql-queries)
       * [Query with criteria](#query-with-criteria)
       * [Query with placeholders](#query-with-placeholders)
       * [Query \- Ensuring all documents are the latest (scan consistency)](#query---ensuring-all-documents-are-the-latest-scan-consistency)
       * [Query \- Better reuse of queries with adhoc(false) and Prepared Statements](#query---better-reuse-of-queries-with-adhocfalse-and-prepared-statements)
       * [Query \- UPDATE and DELETE](#query---update-and-delete)
-      * [CAS Handling \- Using CAS for concurrent mutations](#cas-handling---using-cas-for-concurrent-mutations)
-      * [Durability](#durability)
+
+
+## Connecting to Couchbase
+These examples show how to establish a connection from an SDK to
+a Couchbase cluster.
 
 ### Basic Connection
 This example should show how to connect to a remote Couchbase cluster and bucket
@@ -60,8 +70,13 @@ Go |
 node.js |
 [PHP](connecting-ssl.php) (currently crashes!)
 
+## Basic Document/KV Operations
+
+These examples demonstrate the most basic functionality of working with
+documents.
+
 ### Updating/Storing
-This example should show how to store an item into a cluster
+These examples show how to store an item into a cluster
 
 [C](c/updating.c) |
 [Python](python/updating.py) |
@@ -81,6 +96,9 @@ This example should show how to get items out of the cluster
 [Go](go/retrieving.go) |
 [node.js](nodejs/retrieving.js) |
 [PHP](php/retrieving.php)
+
+## Advanced Document/KV Operations
+These examples show how to perform more detailed operations on documents
 
 ### Bulk Storing
 This example should show how to store items into a cluster using the Bulk API
@@ -125,6 +143,39 @@ This example should show how to initialize a document with an Expiry or "ttl" - 
 [Go](go/expiration.go) |
 [node.js](nodejs/expiration.js) |
 [PHP](php/expiration.php)
+
+
+### CAS Handling - Using CAS for concurrent mutations
+This example will demonstrate concurrent mutations with and without using the
+CAS value. Without using the CAS value, some modifications may end up getting
+lost, whereas using the CAS within a proper retry mechanism will ensure that
+all mutations remain in tact
+
+[C](c/cas.cc) |
+[Python](python/cas.py) |
+[Java](java/src/main/java/com/couchbase/devguide/Cas.java) |
+[.NET](dotnet/Cas.cs) |
+Go |
+node.js |
+[PHP](php/cas.php)
+
+### Durability
+Shows storing an item with durability requirements, attempting to persist/replicate
+to the maximum number of nodes available.
+
+Some SDKs provide APIs to determine how many nodes are in the cluster, while some SDKs allow dynamically persisting to the total number of nodes available, while others only allow fixed numbers. More details may be found in the examples.
+
+[C](c/durability.cc) |
+[Python](python/durability.py) |
+[Java](java/src/main/java/com/couchbase/devguide/Durability.java) |
+[.NET](dotnet/Durability.cs) |
+Go |
+node.js |
+PHP
+
+## N1QL Queries
+
+These examples show how to query using N1QL
 
 ### Query with criteria
 This example should show how to perform a simple query against the travel-sample bucket. The query is something like:
@@ -190,30 +241,3 @@ C |
 Go |
 node.js
 
-### CAS Handling - Using CAS for concurrent mutations
-This example will demonstrate concurrent mutations with and without using the
-CAS value. Without using the CAS value, some modifications may end up getting
-lost, whereas using the CAS within a proper retry mechanism will ensure that
-all mutations remain in tact
-
-[C](c/cas.cc) |
-[Python](python/cas.py) |
-[Java](java/src/main/java/com/couchbase/devguide/Cas.java) |
-[.NET](dotnet/Cas.cs) |
-Go |
-node.js |
-[PHP](php/cas.php)
-
-### Durability
-Shows storing an item with durability requirements, attempting to persist/replicate
-to the maximum number of nodes available.
-
-Some SDKs provide APIs to determine how many nodes are in the cluster, while some SDKs allow dynamically persisting to the total number of nodes available, while others only allow fixed numbers. More details may be found in the examples.
-
-[C](c/durability.cc) |
-[Python](python/durability.py) |
-[Java](java/src/main/java/com/couchbase/devguide/Durability.java) |
-[.NET](dotnet/Durability.cs) |
-Go |
-node.js |
-PHP
