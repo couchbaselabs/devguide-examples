@@ -13,3 +13,5 @@ bulk-get
 bulk-store
 connecting-ssl
 *.dSYM
+subdoc-updating
+subdoc-retrieving

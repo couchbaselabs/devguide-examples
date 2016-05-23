@@ -28,6 +28,9 @@ to Couchbase Server 4.5, and so on.
   * [Expiry](#expiry)
   * [CAS Handling - Using CAS for concurrent mutations](#cas-handling---using-cas-for-concurrent-mutations)
   * [Durability](#durability)
+- [Sub-Document Operations](#sub-document-operations)
+  * [Subdoc - Retrieving](#subdoc---retrieving)
+  * [Subdoc - Updating/Storing](#subdoc---updatingstoring)
 - [N1QL Queries](#n1ql-queries)
   * [Query with criteria](#query-with-criteria)
   * [Query with placeholders](#query-with-placeholders)
@@ -166,6 +169,33 @@ Some SDKs provide APIs to determine how many nodes are in the cluster, while som
 [Python](python/durability.py) |
 [Java](java/src/main/java/com/couchbase/devguide/Durability.java) |
 [.NET](dotnet/Durability.cs) |
+Go |
+node.js |
+PHP
+
+## Sub-Document Operations
+
+Sub-Document operations (new in Couchbase 4.5) allows efficient addressing of sections within documents
+(sub-documents). Sub-Document is often abbreviated as _subdoc_.
+
+### Subdoc - Retrieving
+Retrieve a few fields from a document; also demonstrate error handling if some fields are missing
+
+[C](c/subdoc-retrieving.cc) |
+[Python](python/subdoc-retrieving.py) |
+Java |
+.NET |
+Go |
+node.js |
+PHP
+
+### Subdoc - Updating/Storing
+Modify a few fields within a document. Show error handling and the behavior of the `create` option
+
+[C](c/subdoc-updating.cc) |
+[Python](python/subdoc-updating.py) |
+Java |
+.NET |
 Go |
 node.js |
 PHP
