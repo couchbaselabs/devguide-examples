@@ -29,7 +29,7 @@ the certificate.
 .NET |
 Go |
 node.js |
-[PHP](connecting-ssl.php) (currently crashes!)
+[PHP](php/connecting-ssl.php) (currently crashes!)
 
 ### Updating/Storing
 This example should show how to store an item into a cluster
