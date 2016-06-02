@@ -268,3 +268,17 @@ C |
 Go |
 node.js
 
+## Full-Text (CBFT) Queries
+
+### Basic full-text example
+
+This should show basic functionality of the FTS feature. Search for 'hoppy'
+in `beer-sample`
+
+[C](c/fts-basic.cc) |
+[Python](python/fts-basic.py) |
+.NET |
+Go |
+node.js |
+Java |
+PHP

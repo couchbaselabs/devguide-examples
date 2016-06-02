@@ -1,7 +1,7 @@
 PROGS=connecting updating retrieving query-create-index query-criteria \
 	  query-placeholders counter expiration \
 	  query-consistency cas durability bulk-get bulk-store \
-	  connecting-ssl subdoc-retrieving subdoc-updating
+	  connecting-ssl subdoc-retrieving subdoc-updating fts-basic
 
 all: $(PROGS)
 
