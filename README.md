@@ -299,3 +299,14 @@ node.js |
 Java |
 PHP
 
+### Flushing a Bucket
+
+This should show an example of how to flush a bucket.
+
+[C](c/flush.cc) |
+[Python](python/flush.py) |
+.NET |
+Go |
+node.js |
+Java |
+PHP
