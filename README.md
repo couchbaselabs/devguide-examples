@@ -282,3 +282,20 @@ Go |
 node.js |
 Java |
 PHP
+
+## Cluster Management
+
+### Create/Remove buckets
+
+This should show a basic example of creating and removing a bucket. It might
+also be good to show how to wait until a newly created bucket becomes ready
+as well.
+
+[C](c/create-remove-bucket.cc) |
+[Python](python/create-remove-bucket.py) |
+.NET |
+Go |
+node.js |
+Java |
+PHP
+
