@@ -18,3 +18,4 @@ subdoc-retrieving
 fts-basic
 create-remove-bucket
 flush
+n1ql-create-primary-index

@@ -310,3 +310,16 @@ Go |
 node.js |
 Java |
 PHP
+
+### Creating N1QL Primary Index
+
+This should show how to create the primary N1QL index on a bucket, ignoring
+whether it exists or not
+
+[C](c/n1ql-create-primary-index.cc) |
+[Python](python/n1ql-create-primary-index.py) |
+.NET |
+Go |
+node.js |
+Java |
+PHP
