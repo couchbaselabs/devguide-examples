@@ -246,6 +246,19 @@ Go |
 node.js |
 [PHP](php/query-consistency.php)
 
+### Query - Ensuring all documents are consistent with a given mutation (`at_plus`)
+
+This example should show performing a mutation, and then showing a query that is
+consistent with that given mutation
+
+[C](c/query-atplus.cc) |
+[Python](python/query-atplus.py) |
+Java |
+.NET |
+Go |
+node.js |
+PHP
+
 ### Query - Better reuse of queries with adhoc(false) and Prepared Statements
 This example should demonstrate best practice when a statement is to be reused heavily. Setting the `adhoc` N1QL query tuning to `false` will use Prepared Statements in the background, which is useful in such a case. Note how this works with placeholders (but of course simple statements work too).
 
