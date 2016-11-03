@@ -29,7 +29,7 @@ the certificate.
 .NET |
 Go |
 node.js |
-[PHP](php/connecting-ssl.php) (currently crashes!)
+[PHP](php/connecting-ssl.php)
 
 ### Updating/Storing
 This example should show how to store an item into a cluster
@@ -187,4 +187,4 @@ Some SDKs provide APIs to determine how many nodes are in the cluster, while som
 [.NET](dotnet/Durability.cs) |
 Go |
 node.js |
-PHP
+[PHP](php/durability.php)
