@@ -68,7 +68,7 @@ the certificate.
 .NET |
 Go |
 node.js |
-[PHP](php/connecting-ssl.php) (currently crashes!)
+[PHP](php/connecting-ssl.php)
 
 ## Basic Document/KV Operations
 
@@ -335,4 +335,4 @@ whether it exists or not
 Go |
 node.js |
 Java |
-PHP
+[PHP](php/durability.php)
