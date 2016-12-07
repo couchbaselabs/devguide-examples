@@ -18,8 +18,8 @@ $query->options['args'] = array('Brass');
 $query->consistency(CouchbaseN1qlQuery::REQUEST_PLUS);
 
 printf("Expecting random: %d\n",  $RANDOM_NUMBER);
-$rows = $bucket->query($query);
-foreach ($rows as $row) {
+$result = $bucket->query($query);
+foreach ($result->rows as $row) {
     printf("Name: %s, Email: %s, Random: %d\n", implode(" ", $row->name), $row->email, $row->random);
     if ($row->random == $RANDOM_NUMBER) {
         echo "!!! Found or newly inserted document !!!\n";
