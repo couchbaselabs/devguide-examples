@@ -1,6 +1,6 @@
 <?php
 
-$cluster = new CouchbaseCluster('couchbase://localhost');
+$cluster = new \Couchbase\Cluster('couchbase://192.168.1.194');
 $bucket = $cluster->openBucket('default');
 
 echo "Storing with an expiration of 2 seconds\n";
@@ -14,7 +14,7 @@ sleep(4);
 echo "Getting item back again\n";
 try {
     $bucket->get('docid');
-} catch (CouchbaseException $ex) {
+} catch (\Couchbase\Exception $ex) {
     printf("Failed: %s\n", $ex->getMessage());
 }
 
@@ -31,7 +31,7 @@ sleep(4);
 echo "Getting key again (should fail)\n";
 try {
     $bucket->get('docid');
-} catch (CouchbaseException $ex) {
+} catch (\Couchbase\Exception $ex) {
     printf("Failed with %s\n", $ex->getMessage());
 }
 
@@ -47,6 +47,6 @@ sleep(4);
 echo "Will try to get item again...\n";
 try {
     $bucket->get('docid');
-} catch (CouchbaseException $ex) {
+} catch (\Couchbase\Exception $ex) {
     printf("Failed with %s\n", $ex->getMessage());
 }

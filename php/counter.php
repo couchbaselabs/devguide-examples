@@ -15,4 +15,4 @@ $result = $bucket->counter('docid', 1);
 echo 'Delta=1. Current value is: ' . $result->value . "\n";
 
 $result = $bucket->counter('docid', -50);
-echo 'Delta=-50. Current value is: ' . $result->value;
+echo 'Delta=-50. Current value is: ' . $result->value . "\n";

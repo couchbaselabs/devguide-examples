@@ -2,12 +2,12 @@
 
 /**
  * Query all airports for a given city
- * @param CouchbaseBucket $bkt bucket to use
+ * @param \Couchbase\Bucket $bkt bucket to use
  * @param string $city City to search for
  * @return array Rows for each city
  */
 function query_city($bkt, $city) {
-    $query = CouchbaseN1qlQuery::fromString('SELECT airportname FROM `travel-sample` WHERE city=$1 AND type="airport"');
+    $query = \Couchbase\N1qlQuery::fromString('SELECT airportname FROM `travel-sample` WHERE city=$1 AND type="airport"');
     $query->options['args'] = array($city);
     // The following optimizes the query for repeated invocation. The query string
     // (i.e. the one in fromString) is converted to an optimized form at the
@@ -17,7 +17,7 @@ function query_city($bkt, $city) {
     return $bkt->query($query);
 }
 
-$cluster = new CouchbaseCluster('couchbase://localhost');
+$cluster = new \Couchbase\Cluster('couchbase://localhost');
 $bucket = $cluster->openBucket('travel-sample');
 
 echo "Airports in Reno:\n";
