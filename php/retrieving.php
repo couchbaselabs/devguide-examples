@@ -1,11 +1,11 @@
 <?php
-$cluster = new CouchbaseCluster("couchbase://localhost");
+$cluster = new \Couchbase\Cluster("couchbase://localhost");
 $bucket = $cluster->openBucket("default");
 
 echo "Getting non-existent key. Should fail\n";
 try {
     $bucket->get('non-exist-document');
-} catch (CouchbaseException $ex) {
+} catch (\Couchbase\Exception $ex) {
     if ($ex->getCode() != COUCHBASE_KEY_ENOENT) {
         throw new Exception("GRRR");
     }

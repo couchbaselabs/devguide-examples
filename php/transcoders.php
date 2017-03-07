@@ -5,8 +5,9 @@
  * to the server, rather than using the default methods as defined by the SDK.
  *
  * To see a more thorough but complex example of transcoder functions, please
- * see the Couchbase.class.php at the root of the SDK source tree, which
- * contains the default transcoders.
+ * see the api/couchbase.php at the root of the SDK source tree, which
+ * contains more details about transcoders and couchbase.c which contains
+ * implementation.
  *
  * NOTE: When using custom transcoders, it is unlikely that the default
  * transcoders will work against the resulting document.  Thus, if you use a
@@ -18,7 +19,7 @@
  * Create a new Cluster object to represent the connection to our
  * cluster and specify any needed options such as SSL.
  */
-$cb = new CouchbaseCluster('couchbase://localhost');
+$cb = new \Couchbase\Cluster('couchbase://localhost');
 
 /*
  * We open the default bucket to store our cached data in.
@@ -79,7 +80,7 @@ $db->setTranscoder('example_encoder', 'example_decoder');
  */
 $im = imagecreatetruecolor(300, 50);
 $text_color = imagecolorallocate($im, 233, 14, 91);
-imagestring($im, 6, 10, 10,  'Couchbase Rocks!', $text_color);
+imagestring($im, 6, 10, 10,  '\Couchbase\ Rocks!', $text_color);
 
 /*
  * Store it in Couchbase.  This should execute our custom encoder.

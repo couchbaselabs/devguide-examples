@@ -1,6 +1,8 @@
 <?php
 
-$cluster = new CouchbaseCluster('couchbase://localhost');
+// This example depends on php-posix module because of posix_getpid()
+
+$cluster = new \Couchbase\Cluster('couchbase://localhost');
 $bucket = $cluster->openBucket('default');
 
 $bucket->upsert('a_list', array());
@@ -19,7 +21,7 @@ function add_to_couchbase_list($bkt, $docid, $newval) {
         try {
             // Try to get the initial document
             $metadoc = $bkt->get($docid);
-        } catch (CouchbaseException $ex) {
+        } catch (\Couchbase\Exception $ex) {
             if ($ex->getCode() != COUCHBASE_KEY_ENOENT) {
                 throw $ex;
             }
@@ -32,7 +34,7 @@ function add_to_couchbase_list($bkt, $docid, $newval) {
                 echo "List $docid created\n";
                 // We don't need to append a new item because the list is already present.
                 return true;
-            } catch (CouchbaseException $ex) {
+            } catch (\Couchbase\Exception $ex) {
                 if ($ex->getCode() != COUCHBASE_KEY_EEXISTS) {
                     throw $ex;
                 }
@@ -48,7 +50,7 @@ function add_to_couchbase_list($bkt, $docid, $newval) {
         try {
             $bkt->replace($docid, $doc, array("cas" => $metadoc->cas));
             return true;
-        } catch (CouchbaseException $ex) {
+        } catch (\Couchbase\Exception $ex) {
             if ($ex->getCode() != COUCHBASE_KEY_EEXISTS) {
                 throw $ex;
             }
@@ -60,16 +62,16 @@ function add_to_couchbase_list($bkt, $docid, $newval) {
 
 add_to_couchbase_list($bucket, 'a_list', posix_getpid());
 
-//mnunberg@mbp15II ~/Source/devguide-examples/php $
-//62531: CAS Mismatch (tried 2brb7ujzls). Retrying (remaining=10)
-//62525: CAS Mismatch (tried m6i0rsoao). Retrying (remaining=10)
-//62529: CAS Mismatch (tried nclciatc0). Retrying (remaining=10)
-//62533: CAS Mismatch (tried nclciatc0). Retrying (remaining=10)
-//62525: CAS Mismatch (tried nclciatc0). Retrying (remaining=9)
-//62535: CAS Mismatch (tried nclciatc0). Retrying (remaining=10)
-//62529: CAS Mismatch (tried tl333nk74). Retrying (remaining=9)
-//62535: CAS Mismatch (tried tl333nk74). Retrying (remaining=9)
-//62525: CAS Mismatch (tried tl333nk74). Retrying (remaining=8)
-//62535: CAS Mismatch (tried wpbyebxmo). Retrying (remaining=8)
-//62525: CAS Mismatch (tried wpbyebxmo). Retrying (remaining=7)
-//62525: CAS Mismatch (tried ztktp0b28). Retrying (remaining=6)
+// $ seq 1 10 | parallel php -d extension=couchbase.so php/cas.php
+// 97885: CAS Mismatch (tried bb82yqvebj7k). Retrying (remaining=10)
+// 97889: CAS Mismatch (tried bb82yqve5wxs). Retrying (remaining=10)
+// 97889: CAS Mismatch (tried bb82yqvg2qrk). Retrying (remaining=9)
+// 97883: CAS Mismatch (tried bb82yqvea4n4). Retrying (remaining=10)
+// 97888: CAS Mismatch (tried bb82yqvebj7k). Retrying (remaining=10)
+// 97888: CAS Mismatch (tried bb82yqvh62o0). Retrying (remaining=9)
+// 97886: CAS Mismatch (tried bb82yqvebj7k). Retrying (remaining=10)
+// 97886: CAS Mismatch (tried bb82yqvg2qrk). Retrying (remaining=9)
+// 97886: CAS Mismatch (tried bb82yqvhzklc). Retrying (remaining=8)
+// 97890: CAS Mismatch (tried bb82yqvf0tfk). Retrying (remaining=10)
+// 97890: CAS Mismatch (tried bb82yqvh62o0). Retrying (remaining=9)
+// 97890: CAS Mismatch (tried bb82yqvixa80). Retrying (remaining=8)

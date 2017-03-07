@@ -1,21 +1,21 @@
 <?php
 
-$cluster = new CouchbaseCluster('couchbase://localhost');
+$cluster = new \Couchbase\Cluster('couchbase://192.168.1.194');
 $bucket = $cluster->openBucket('default');
 
 $RANDOM_NUMBER = rand(0, 10000000);
 $bucket->upsert('user:'.$RANDOM_NUMBER, array(
     "name" => array("Brass", "Doorknob"),
-    "email" => "brass.doorknob@juno.com",
+    "email" => "brass.doorknob@example.com",
     "random" => $RANDOM_NUMBER)
 );
 
-$query = CouchbaseN1qlQuery::fromString(
+$query = \Couchbase\N1qlQuery::fromString(
     'SELECT name, email, random, META(default).id FROM default WHERE $1 IN name'
 );
-$query->options['args'] = array('Brass');
+$query->positionalParams(['Brass']);
 // If this line is removed, the latest 'random' field might not be present
-$query->consistency(CouchbaseN1qlQuery::REQUEST_PLUS);
+$query->consistency(\Couchbase\N1qlQuery::REQUEST_PLUS);
 
 printf("Expecting random: %d\n",  $RANDOM_NUMBER);
 $result = $bucket->query($query);
@@ -25,29 +25,29 @@ foreach ($result->rows as $row) {
         echo "!!! Found or newly inserted document !!!\n";
     }
     if (getenv("REMOVE_DOORKNOBS")) {
-            echo "Removing " . $row->id . " (Requested via env)\n";
+        echo "Removing " . $row->id . " (Requested via env)\n";
         $bucket->remove($row->id);
     }
 }
 
 // More light-weight way to do this is to use AT_PLUS consistency
 // It will require mutation tokens enabled during connection.
-$cluster = new CouchbaseCluster('couchbase://localhost?fetch_mutation_tokens=true');
+$cluster = new \Couchbase\Cluster('couchbase://192.168.1.194?fetch_mutation_tokens=true');
 $bucket = $cluster->openBucket('default');
 
 $RANDOM_NUMBER = rand(0, 10000000);
 $result = $bucket->upsert('user:'.$RANDOM_NUMBER, array(
     "name" => array("Brass", "Doorknob"),
-    "email" => "brass.doorknob@juno.com",
+    "email" => "brass.doorknob@example.com",
     "random" => $RANDOM_NUMBER)
 );
 // construct mutation state from the list of mutation results
-$mutationState = CouchbaseMutationState::from(array($result));
+$mutationState = \Couchbase\MutationState::from($result);
 
-$query = CouchbaseN1qlQuery::fromString(
+$query = \Couchbase\N1qlQuery::fromString(
     'SELECT name, email, random, META(default).id FROM default WHERE $1 IN name'
 );
-$query->options['args'] = array('Brass');
+$query->positionalParams(['Brass']);
 // If this line is removed, the latest 'random' field might not be present
 $query->consistentWith($mutationState);
 
@@ -59,7 +59,7 @@ foreach ($result->rows as $row) {
         echo "!!! Found or newly inserted document !!!\n";
     }
     if (getenv("REMOVE_DOORKNOBS")) {
-            echo "Removing " . $row->id . " (Requested via env)\n";
+        echo "Removing " . $row->id . " (Requested via env)\n";
         $bucket->remove($row->id);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-$cluster = new CouchbaseCluster("couchbase://localhost");
+$cluster = new \Couchbase\Cluster("couchbase://localhost");
 $bucket = $cluster->openBucket("default");
 
 // This always works!
@@ -17,7 +17,7 @@ echo "Should fail because the item already exists..\n";
 try {
     $bucket->insert('docid', array('property' => 'value'));
     throw new Exception("Shouldn't reach here!");
-} catch (CouchbaseException $ex) {
+} catch (\Couchbase\Exception $ex) {
     printf("Got error: Code=0x%x, Message=%s\n", $ex->getCode(), $ex->getMessage());
 }
 echo "...\n";
@@ -34,6 +34,6 @@ echo "Replacing document again. Should fail because document no longer exists\n"
 
 try {
     $bucket->replace("docid", array("property" => "new_value"));
-} catch (CouchbaseException $ex) {
+} catch (\Couchbase\Exception $ex) {
     printf("Got error %s\n", $ex->getMessage());
 }
