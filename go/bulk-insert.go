@@ -13,13 +13,13 @@ func main() {
 	// Connect to Cluster
 	cluster, err := gocb.Connect("couchbase://127.0.0.1")
 	if err != nil {
-		fmt.Println("ERRROR CONNECTING TO CLUSTER:", err)
+		fmt.Println("ERROR CONNECTING TO CLUSTER:", err)
 	}
 
 	// Open Bucket
 	bucket, err = cluster.OpenBucket("travel-sample", "")
 	if err != nil {
-		fmt.Println("ERRROR OPENING BUCKET:", err)
+		fmt.Println("ERROR OPENING BUCKET:", err)
 	}
 
 	// Create a JSON document
@@ -40,7 +40,7 @@ func main() {
 	// Perform the bulk operation
 	err = bucket.Do(items)
 	if err != nil {
-		fmt.Println("ERRROR PERFORMING BULK INSERT:", err)
+		fmt.Println("ERROR PERFORMING BULK INSERT:", err)
 	}
 
 	// Exiting
