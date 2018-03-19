@@ -1,6 +1,6 @@
 # Developer Guide Examples
 
-See Couchbase Server version specific examples:  [4.5](tree/server-4.5) \| [4.6](tree/server-4.6) \| [5.0](tree/server-5.0) \| [5.1](tree/server-5.1)
+See Couchbase Server version specific examples:  [4.5](http://github.com/couchbaselabs/devguide-examples/tree/server-4.5) \| [4.6](http://github.com/couchbaselabs/devguide-examples/tree/server-4.6) \| [5.0](http://github.com/couchbaselabs/devguide-examples/tree/server-5.0) \| [5.1](http://github.com/couchbaselabs/devguide-examples/tree/server-5.1)
 
 These examples are the basis for examples published in Couchbase
 documentation.  There are examples for each language.
