@@ -1,14 +1,19 @@
 # Developer Guide Examples
 
-These examples are intended to be linked to from within the developer guide.
-They are currently cross-referenced by language.
+See Couchbase Server version specific examples:  [4.5](tree/server-4.5) \| [4.6](tree/server-4.6) \| [5.0](tree/server-5.0) \| [5.1](tree/server-5.1)
 
-Each example should be fully self-contained and executable. For languages which have a significant setup, the example may be split into multiple files, but should still be executable. Error handling is optional but should be be at least hinted at.
+These examples are the basis for examples published in Couchbase
+documentation.  There are examples for each language.
 
-### How to use these examples
+By design each example is fully self-contained and executable. For
+languages which have a significant setup, the example may be split
+into multiple files, but should still be executable. Error handling is
+optional to keep the example easy to read but should be described.
+
+### How to Use These Examples
 
 The examples are versioned by the features introduced in a given server
-version (and if required, by an SDK-specific sub-series within them).
+version.
 
 The `server-4.5` branch should be used for documentation content related
 to Couchbase Server 4.5, and so on.
@@ -145,7 +150,7 @@ This example should show how to initialize a document with an Expiry or "ttl" - 
 [PHP](php/expiration.php)
 
 
-### CAS Handling - Using CAS for concurrent mutations
+### CAS Handling - Using CAS for Concurrent Mutations
 This example will demonstrate concurrent mutations with and without using the
 CAS value. Without using the CAS value, some modifications may end up getting
 lost, whereas using the CAS within a proper retry mechanism will ensure that
@@ -204,7 +209,7 @@ PHP
 
 These examples show how to query using N1QL
 
-### Query with criteria
+### Query with Criteria
 This example should show how to perform a simple query against the travel-sample bucket. The query is something like:
 
 ```
@@ -221,8 +226,13 @@ query = N1QLQuery('SELECT airportname, city, country FROM `travel-sample` '
 [PHP](php/query-criteria.php)
 
 
-### Query with placeholders
-This example should demonstrate how to use placeholders, and also the advantages they afford, perhaps by abstracting a given query away as a function, and passing a function parameter down as a query parameter.
+### Query with Placeholders
+This example should demonstrate how to use placeholders, and also the
+advantages they afford, perhaps by abstracting a given query away as a
+function, and passing a function parameter down as a query parameter.
+Note: the term "placeholder" was chosen as the term "parameter" is
+overloaded.  Placeholder is a bit more related to what is happening
+in a query statement.
 
 This example should also demonstrate in a *commented* section of code how to
 optimize this query.
@@ -235,7 +245,7 @@ optimize this query.
 [node.js](nodejs/query-placeholders.js) |
 [PHP](php/query-placeholders.php)
 
-### Query - Ensuring all documents are the latest (scan consistency)
+### Query - Ensuring all Documents are the Latest (scan consistency)
 This example should show how the `scan_consistency` parameter may be enabled for a specific query.
 
 [C](c/query-consistency.cc) |
@@ -259,7 +269,7 @@ Go |
 node.js |
 PHP
 
-### Query - Better reuse of queries with adhoc(false) and Prepared Statements
+### Query - Better Reuse of Queries with adhoc(false) and Prepared Statements
 This example should demonstrate best practice when a statement is to be reused heavily. Setting the `adhoc` N1QL query tuning to `false` will use Prepared Statements in the background, which is useful in such a case. Note how this works with placeholders (but of course simple statements work too).
 
 C |
@@ -336,3 +346,21 @@ Go |
 node.js |
 Java |
 [PHP](php/durability.php)
+
+
+## Development and Branching
+
+As mentioned above, this repository has a branch per server release.
+The choice of a branch (versus a tag) is intentional, as samples may
+continue to be added after a release.  This is more documentation
+management than software management.
+
+In general, if adding samples for the version under development, add
+them to the 'master' branch.  At some point of completion, this will
+be branched when released.
+
+If adding a sample to an 'older' branch, please also cherry-pick it to
+master or other relevant branches.  For instance, if one were to add a
+sample to server-4.6, it should also be cherry-picked to master,
+server-5.0, server-5.1, server-5.5.  Better yet might be to add it to
+master and then cherry-pick it to the relevant releases.
