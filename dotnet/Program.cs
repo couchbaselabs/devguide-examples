@@ -23,6 +23,7 @@ namespace DevGuide
             await new Update().ExecuteAsync();
             await new BulkInsert().ExecuteAsync();
             await new BulkGet().ExecuteAsync();
+            await new FieldEncryption().ExecuteAsync();
         }
     }
 }
