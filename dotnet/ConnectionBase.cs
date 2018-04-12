@@ -26,10 +26,12 @@ namespace DevGuide
             var config = GetConnectionConfig();
 
             _cluster = new Cluster(config);
+            _cluster.Authenticate("Administrator", "password");
+
             _bucket = _cluster.OpenBucket();
         }
 
-        private ClientConfiguration GetConnectionConfig()
+        protected virtual ClientConfiguration GetConnectionConfig()
         {
             return new ClientConfiguration
             {
