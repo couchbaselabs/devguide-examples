@@ -1,0 +1,19 @@
+{
+    "name": "couchbase/encryption-demo",
+    "description": "Demonstration of field-level encryption extension to Couchbase SDK",
+    "type": "project",
+    "require": {
+        "couchbase/couchbase-encryption": "^0.7.2"
+    },
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Sergey Avseyev",
+            "email": "sergey@couchbase.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "scripts": {
+        "demo": "@php ./demo.php"
+    }
+}
