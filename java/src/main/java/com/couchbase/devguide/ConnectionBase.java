@@ -6,6 +6,8 @@ import java.util.List;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.env.CouchbaseEnvironment;
+import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 import org.apache.log4j.Logger;
 
 public class ConnectionBase {
@@ -19,10 +21,11 @@ public class ConnectionBase {
     public static final String bucketName = "default";
     public static final String bucketPassword = "";
     public static final List<String> nodes = Arrays.asList("127.0.0.1");
+    public static CouchbaseEnvironment environment = DefaultCouchbaseEnvironment.create();
 
-    protected ConnectionBase() {
+    public ConnectionBase() {
         //connect to the cluster by hitting one of the given nodes
-        cluster = CouchbaseCluster.create(nodes);
+        cluster = CouchbaseCluster.create(environment, nodes);
         //get a Bucket reference from the cluster to the configured bucket
         bucket = cluster.openBucket(bucketName, bucketPassword);
     }
