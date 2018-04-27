@@ -12,4 +12,5 @@
  * on php_curl unloading.
  */
 $cluster = new \Couchbase\Cluster('couchbases://localhost?certpath=/tmp/couchbase-ssl-certificate.pem');
+$cluster->authenticateAs('Administrator', 'password');
 $bucket = $cluster->openBucket('default');
