@@ -50,7 +50,7 @@ openssl genrsa -out ${CLIENT}.key 2048
 openssl req -new -key ${CLIENT}.key -out ${CLIENT}.csr -subj "/CN=${USERNAME}/OU=None/O=None/L=None/S=None/C=US"
 openssl x509 -req -in ${CLIENT}.csr -CA ../${INT_DIR}/${INTERMEDIATE}.pem \
   -CAkey ../${INT_DIR}/${INTERMEDIATE}.key -CAcreateserial \
-  -CAserial ../${INT_DIR}/intermediateCA.srl -out ${CLIENT}.pem -days 365
+  -CAserial ../${INT_DIR}/intermediateCA.srl -out ${CLIENT}.pem -days 365 -extfile ../openssl.cnf -extensions 'v3_req'
 
 cat ./${CLIENT}.pem ../${INT_DIR}/${INTERMEDIATE}.pem ../${ROOT_DIR}/${ROOT_CA}.pem > ./${CHAIN}.pem
 
