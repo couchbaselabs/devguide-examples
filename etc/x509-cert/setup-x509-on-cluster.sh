@@ -93,7 +93,6 @@ subjectAltName = @alt_names
 
 [alt_names]
 IP.1 = ${ip}
-IP.2 = 172.23.120.17
 EOF
 
 # Generate the intermediate public key (int.pem), based on the intermediate
