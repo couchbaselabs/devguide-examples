@@ -39,7 +39,7 @@ public class ConnectingSsl {
         cluster = CouchbaseCluster.create(env, nodes);
 
 	//authenticate with the cluster
-	cluster.authenticator(adminUsername, adminPassword);
+	cluster.authenticate(adminUsername, adminPassword);
 
         //get a Bucket reference from the cluster to the configured bucket
         bucket = cluster.openBucket(bucketName);
