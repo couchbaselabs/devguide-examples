@@ -1,15 +1,33 @@
-PROGS=connecting updating retrieving query-create-index query-criteria \
-	  query-placeholders counter expiration \
-	  query-consistency cas durability bulk-get bulk-store \
-	  connecting-ssl subdoc-retrieving subdoc-updating fts-basic \
-	  create-remove-bucket flush n1ql-create-primary-index \
-	  query-atplus
+CPPFLAGS=-Wall -g
+LDLIBS=-lcouchbase -pthread
+
+PROGS = \
+	bulk-get \
+	bulk-store \
+	cas \
+	connecting \
+	connecting-cert-auth \
+	connecting-ssl \
+	counter \
+	create-remove-bucket \
+	durability \
+	expiration \
+	flush \
+	fts-basic \
+	n1ql-create-primary-index \
+	query-atplus \
+	query-consistency \
+	query-create-index \
+	query-criteria \
+	query-placeholders \
+	retrieving \
+	subdoc-retrieving \
+	subdoc-updating \
+	updating \
+
 
 all: $(PROGS)
 
 clean:
 	rm -f $(PROGS)
 	rm -rf *.dSYM
-
-CPPFLAGS=-Wall -g
-LDLIBS=-lcouchbase

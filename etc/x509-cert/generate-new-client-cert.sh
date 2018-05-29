@@ -25,6 +25,7 @@ export ROOT_CA=ca
 export INTERMEDIATE=int
 export CLIENT=client
 export CHAIN=chain
+export TRUST=trust
 
 # Create environment variables for the administrator-credentials to be used for
 # certificate-management, the IP address at which the Couchbase Server-node is
@@ -52,9 +53,12 @@ openssl x509 -req -in ${CLIENT}.csr -CA ../${INT_DIR}/${INTERMEDIATE}.pem \
   -CAkey ../${INT_DIR}/${INTERMEDIATE}.key -CAcreateserial \
   -CAserial ../${INT_DIR}/intermediateCA.srl -out ${CLIENT}.pem -days 365 -extfile ../openssl.cnf -extensions 'v3_req'
 
+cat ../${INT_DIR}/${INTERMEDIATE}.pem ../${ROOT_DIR}/${ROOT_CA}.pem > ./${TRUST}.pem
 cat ./${CLIENT}.pem ../${INT_DIR}/${INTERMEDIATE}.pem ../${ROOT_DIR}/${ROOT_CA}.pem > ./${CHAIN}.pem
 
+set +x
 echo "ROOT CA: $(realpath ../${ROOT_DIR}/${ROOT_CA}.pem)"
-echo "INERMEDIATE CA: $(realpath ../${INT_DIR}/${INTERMEDIATE}.pem)"
+echo "INTERMEDIATE CA: $(realpath ../${INT_DIR}/${INTERMEDIATE}.pem)"
+echo "TRUSTSTORE CA (ROOT+INTERMEDIATE): $(realpath ./${TRUST}.pem)"
 echo "CHAINED: $(realpath ./${CHAIN}.pem)"
 echo "CLIENT CERT: $(realpath ./${CLIENT}.pem)"
