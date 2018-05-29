@@ -12,12 +12,13 @@ struct Result {
     std::string value;
     lcb_error_t status;
 
-    Result() : status(LCB_MAX_ERROR) {
-    }
-    bool valid() const {
+    Result() : status(LCB_MAX_ERROR) {}
+    bool valid() const
+    {
         return status != LCB_MAX_ERROR;
     }
-    void reset() {
+    void reset()
+    {
         status = LCB_MAX_ERROR;
         value.clear();
     }
@@ -25,8 +26,9 @@ struct Result {
 
 struct SubdocResults {
     lcb_error_t status;
-    std::vector<Result> results;
-    void reset(size_t max_results) {
+    std::vector< Result > results;
+    void reset(size_t max_results)
+    {
         results.resize(max_results);
         for (size_t ii = 0; ii < max_results; ii++) {
             results[ii].reset();
@@ -35,11 +37,10 @@ struct SubdocResults {
 };
 
 extern "C" {
-static void
-sdmutate_callback(lcb_t, int, const lcb_RESPSUBDOC *resp)
+static void sdmutate_callback(lcb_t, int, const lcb_RESPSUBDOC *resp)
 {
     // "cast" to specific callback type
-    SubdocResults *results = reinterpret_cast<SubdocResults*>(resp->cookie);
+    SubdocResults *results = reinterpret_cast< SubdocResults * >(resp->cookie);
     results->status = resp->rc;
 
     if (resp->rc != LCB_SUCCESS && resp->rc != LCB_SUBDOC_MULTI_FAILURE) {
@@ -49,47 +50,52 @@ sdmutate_callback(lcb_t, int, const lcb_RESPSUBDOC *resp)
         return;
     }
 
-    lcb_SDENTRY ent = { 0 };
+    lcb_SDENTRY ent = {};
     size_t ii = 0;
     while (lcb_sdresult_next(resp, &ent, &ii)) {
         // Not all results are returned. Those that are returned
         // can be correlated with the request path index by using
         // lcb_SDENTRY::index
 
-        Result& r = results->results[ent.index];
+        Result &r = results->results[ent.index];
         r.status = ent.status;
         if (ent.nvalue) {
-            r.value.assign(reinterpret_cast<const char*>(ent.value), ent.nvalue);
+            r.value.assign(reinterpret_cast< const char * >(ent.value), ent.nvalue);
         }
     }
 }
 
-static void
-fulldoc_get_callback(lcb_t, int, const lcb_RESPGET *resp)
+static void fulldoc_get_callback(lcb_t, int, const lcb_RESPGET *resp)
 {
     assert(resp->rc == LCB_SUCCESS);
-    printf("Document is now: %.*s\n", (int)resp->nvalue, resp->value);
+    printf("Document is now: %.*s\n", (int)resp->nvalue, (char *)resp->value);
 }
 }
 
-int
-main(int, char **)
+int main(int, char **)
 {
-    lcb_create_st crst;
+    lcb_create_st crst = {};
     lcb_t instance;
-    memset(&crst, 0, sizeof crst);
+    lcb_error_t rc;
 
     crst.version = 3;
-    crst.v.v3.connstr = "couchbase://localhost/default";
+    crst.v.v3.connstr = "couchbase://127.0.0.1/default";
+    crst.v.v3.username = "testuser";
+    crst.v.v3.passwd = "password";
 
     lcb_create(&instance, &crst);
     lcb_connect(instance);
     lcb_wait(instance);
+    rc = lcb_get_bootstrap_status(instance);
+    if (rc != LCB_SUCCESS) {
+        printf("Unable to bootstrap cluster: %s\n", lcb_strerror_short(rc));
+        exit(1);
+    }
 
     // Store a key first, so we know it will exist later on. In real production
     // environments, we'd also want to install a callback for storage operations
     // so we know if they succeeded
-    lcb_CMDSTORE scmd = { 0 };
+    lcb_CMDSTORE scmd = {};
     const char *key = "a_key";
     const char *value = "{\"name\":\"mark\", \"array\":[1,2,3,4], \"email\":\"m@n.com\"}";
     LCB_CMD_SET_KEY(&scmd, key, strlen(key));
@@ -101,12 +107,11 @@ main(int, char **)
 
     // Install the callback for GET operations. Note this can be done at any
     // time before the operation is scheduled
-    lcb_install_callback3(instance, LCB_CALLBACK_SDMUTATE,
-        reinterpret_cast<lcb_RESPCALLBACK>(sdmutate_callback));
+    lcb_install_callback3(instance, LCB_CALLBACK_SDMUTATE, reinterpret_cast< lcb_RESPCALLBACK >(sdmutate_callback));
 
     SubdocResults my_results;
-    lcb_SDSPEC specs[3] = { { 0 } };
-    lcb_CMDSUBDOC sdcmd = { 0 };
+    lcb_SDSPEC specs[3] = {};
+    lcb_CMDSUBDOC sdcmd = {};
 
     LCB_CMD_SET_KEY(&sdcmd, key, strlen(key));
 
@@ -131,7 +136,7 @@ main(int, char **)
     // Should have three results
     assert(my_results.status == LCB_SUCCESS);
     for (size_t ii = 0; ii < my_results.results.size(); ++ii) {
-        const Result& r = my_results.results[ii];
+        const Result &r = my_results.results[ii];
         if (!r.valid()) {
             printf("[%lu]: No output\n", ii);
         } else {
@@ -139,11 +144,10 @@ main(int, char **)
         }
     }
 
-    lcb_install_callback3(instance, LCB_CALLBACK_GET,
-        (lcb_RESPCALLBACK)fulldoc_get_callback);
+    lcb_install_callback3(instance, LCB_CALLBACK_GET, (lcb_RESPCALLBACK)fulldoc_get_callback);
 
     printf("=== Current doc ===\n");
-    lcb_CMDGET gcmd = { 0 };
+    lcb_CMDGET gcmd = {};
     LCB_CMD_SET_KEY(&gcmd, key, strlen(key));
     lcb_get3(instance, NULL, &gcmd);
     lcb_wait(instance);
@@ -160,13 +164,13 @@ main(int, char **)
     lcb_wait(instance);
 
     // Should fail with LCB_SUBDOC_PATH_ENOENT
-    printf("upserting deep path fails: %s\n", lcb_strerror(NULL, my_results.results[0].status));
+    printf("upserting deep path fails: %s\n", lcb_strerror_short(my_results.results[0].status));
 
     // Use a flag
     specs[0].options = LCB_SDSPEC_F_MKINTERMEDIATES;
     lcb_subdoc3(instance, &my_results, &sdcmd);
     lcb_wait(instance);
-    printf("Status with MKINTERMEDIATES: %s\n", lcb_strerror(NULL, my_results.status));
+    printf("Status with MKINTERMEDIATES: %s\n", lcb_strerror_short(my_results.status));
 
     lcb_destroy(instance);
 }

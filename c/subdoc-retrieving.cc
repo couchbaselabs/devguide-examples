@@ -10,21 +10,19 @@ struct Result {
     std::string value;
     lcb_error_t status;
 
-    Result() : status(LCB_SUCCESS) {
-    }
+    Result() : status(LCB_SUCCESS) {}
 };
 
 struct SubdocResults {
     lcb_error_t status;
-    std::vector<Result> results;
+    std::vector< Result > results;
 };
 
 extern "C" {
-static void
-sdget_callback(lcb_t, int, const lcb_RESPSUBDOC *resp)
+static void sdget_callback(lcb_t, int, const lcb_RESPSUBDOC *resp)
 {
     // "cast" to specific callback type
-    SubdocResults *results = reinterpret_cast<SubdocResults*>(resp->cookie);
+    SubdocResults *results = reinterpret_cast< SubdocResults * >(resp->cookie);
     results->status = resp->rc;
 
     if (resp->rc != LCB_SUCCESS && resp->rc != LCB_SUBDOC_MULTI_FAILURE) {
@@ -34,37 +32,43 @@ sdget_callback(lcb_t, int, const lcb_RESPSUBDOC *resp)
         return;
     }
 
-    lcb_SDENTRY ent = { 0 };
+    lcb_SDENTRY ent = {};
     size_t ii = 0;
     while (lcb_sdresult_next(resp, &ent, &ii)) {
         Result r;
         r.status = ent.status;
         if (ent.nvalue) {
-            r.value.assign(reinterpret_cast<const char*>(ent.value), ent.nvalue);
+            r.value.assign(reinterpret_cast< const char * >(ent.value), ent.nvalue);
         }
         results->results.push_back(r);
     }
 }
 }
 
-int
-main(int, char **)
+int main(int, char **)
 {
-    lcb_create_st crst;
+    lcb_create_st crst = {};
     lcb_t instance;
-    memset(&crst, 0, sizeof crst);
+    lcb_error_t rc;
 
     crst.version = 3;
-    crst.v.v3.connstr = "couchbase://localhost/default";
+    crst.v.v3.connstr = "couchbase://127.0.0.1/default";
+    crst.v.v3.username = "testuser";
+    crst.v.v3.passwd = "password";
 
     lcb_create(&instance, &crst);
     lcb_connect(instance);
     lcb_wait(instance);
+    rc = lcb_get_bootstrap_status(instance);
+    if (rc != LCB_SUCCESS) {
+        printf("Unable to bootstrap cluster: %s\n", lcb_strerror_short(rc));
+        exit(1);
+    }
 
     // Store a key first, so we know it will exist later on. In real production
     // environments, we'd also want to install a callback for storage operations
     // so we know if they succeeded
-    lcb_CMDSTORE scmd = { 0 };
+    lcb_CMDSTORE scmd = {};
     const char *key = "a_key";
     const char *value = "{\"name\":\"mark\", \"array\":[1,2,3], \"email\":\"m@n.com\"}";
     LCB_CMD_SET_KEY(&scmd, key, strlen(key));
@@ -76,12 +80,11 @@ main(int, char **)
 
     // Install the callback for GET operations. Note this can be done at any
     // time before the operation is scheduled
-    lcb_install_callback3(instance, LCB_CALLBACK_SDLOOKUP,
-        reinterpret_cast<lcb_RESPCALLBACK>(sdget_callback));
+    lcb_install_callback3(instance, LCB_CALLBACK_SDLOOKUP, reinterpret_cast< lcb_RESPCALLBACK >(sdget_callback));
 
     SubdocResults my_results;
-    lcb_SDSPEC specs[3] = { { 0 } };
-    lcb_CMDSUBDOC sdcmd = { 0 };
+    lcb_SDSPEC specs[3] = {};
+    lcb_CMDSUBDOC sdcmd = {};
 
     LCB_CMD_SET_KEY(&sdcmd, key, strlen(key));
 
@@ -102,9 +105,8 @@ main(int, char **)
     // Should have three results
     assert(my_results.status == LCB_SUBDOC_MULTI_FAILURE);
     for (size_t ii = 0; ii < my_results.results.size(); ++ii) {
-        const Result& r = my_results.results[ii];
-        printf("Path [%lu]: Status=0x%x (%s). Value=%s\n",
-            ii, r.status, lcb_strerror(NULL, r.status), r.value.c_str());
+        const Result &r = my_results.results[ii];
+        printf("Path [%lu]: Status=%s. Value=%s\n", ii, lcb_strerror_short(r.status), r.value.c_str());
     }
 
     lcb_destroy(instance);

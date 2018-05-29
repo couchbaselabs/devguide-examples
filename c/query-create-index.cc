@@ -2,8 +2,7 @@
 #include <libcouchbase/n1ql.h>
 
 extern "C" {
-static void
-query_callback(lcb_t, int, const lcb_RESPN1QL *resp)
+static void query_callback(lcb_t, int, const lcb_RESPN1QL *resp)
 {
     // This might also fail if the index is already created!
     if (resp->rc != LCB_SUCCESS) {
@@ -13,22 +12,26 @@ query_callback(lcb_t, int, const lcb_RESPN1QL *resp)
 }
 }
 
-int
-main(int, char **)
+int main(int, char **)
 {
     lcb_t instance;
-    struct lcb_create_st crst;
+    struct lcb_create_st crst = {};
     lcb_error_t rc;
-    lcb_CMDN1QL cmd = { 0 };
-    lcb_N1QLPARAMS *params = NULL;
+    lcb_CMDN1QL cmd = {};
+    lcb_N1QLPARAMS *params;
 
-    memset(&crst, 0, sizeof crst);
     crst.version = 3;
-    crst.v.v3.connstr = "couchbase://10.0.0.31/travel-sample";
+    crst.v.v3.connstr = "couchbase://127.0.0.1/travel-sample";
+    crst.v.v3.username = "testuser";
+    crst.v.v3.passwd = "password";
     rc = lcb_create(&instance, &crst); // Check rc
-    rc = lcb_connect(instance); // Check rc
+    rc = lcb_connect(instance);        // Check rc
     lcb_wait(instance);
-    rc = lcb_get_bootstrap_status(instance); // Check rc
+    rc = lcb_get_bootstrap_status(instance);
+    if (rc != LCB_SUCCESS) {
+        printf("Unable to bootstrap cluster: %s\n", lcb_strerror_short(rc));
+        exit(1);
+    }
 
     params = lcb_n1p_new();
     rc = lcb_n1p_setstmtz(params, "CREATE PRIMARY INDEX ON `travel-sample`");

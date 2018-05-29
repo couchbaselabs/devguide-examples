@@ -5,7 +5,7 @@
 #include <vector>
 
 static int RandomNumber_g;
-typedef std::vector<std::string> RowList;
+typedef std::vector< std::string > RowList;
 
 static void query_callback(lcb_t, int, const lcb_RESPN1QL *resp)
 {
@@ -21,25 +21,29 @@ static void query_callback(lcb_t, int, const lcb_RESPN1QL *resp)
 
     // Add rows to the vector, we'll process the results in the calling
     // code.
-    RowList *rowlist = reinterpret_cast<RowList*>(resp->cookie);
+    RowList *rowlist = reinterpret_cast< RowList * >(resp->cookie);
     rowlist->push_back(std::string(resp->row, resp->nrow));
 }
 
-int
-main(int, char **)
+int main(int, char **)
 {
     lcb_t instance;
-    lcb_create_st crst;
+    lcb_create_st crst = {};
     lcb_error_t rc;
 
-    memset(&crst, 0, sizeof crst);
     crst.version = 3;
-    crst.v.v3.connstr = "couchbase://10.0.0.31/default";
+    crst.v.v3.connstr = "couchbase://127.0.0.1/default";
+    crst.v.v3.username = "testuser";
+    crst.v.v3.passwd = "password";
 
     rc = lcb_create(&instance, &crst);
     rc = lcb_connect(instance);
     lcb_wait(instance);
     rc = lcb_get_bootstrap_status(instance);
+    if (rc != LCB_SUCCESS) {
+        printf("Unable to bootstrap cluster: %s\n", lcb_strerror_short(rc));
+        exit(1);
+    }
 
     // Initialize random seed to get a "random" value in our documents
     srand(time(NULL));
@@ -49,15 +53,16 @@ main(int, char **)
     sprintf(key, "user:%d", RandomNumber_g);
     char value[4096];
     sprintf(value,
-        "{"
-            "\"name\":[\"Brass\",\"Doorknob\"],"
-            "\"email\":\"brass.doorknob@juno.com\","
-            "\"random\":%d"
-        "}", RandomNumber_g);
+            "{"
+            "  \"name\":[\"Brass\",\"Doorknob\"],"
+            "  \"email\":\"brass.doorknob@juno.com\","
+            "  \"random\":%d"
+            "}",
+            RandomNumber_g);
 
     printf("Will insert new document with random number %d\n", RandomNumber_g);
 
-    lcb_CMDSTORE scmd = { 0 };
+    lcb_CMDSTORE scmd = {};
     LCB_CMD_SET_KEY(&scmd, key, strlen(key));
     LCB_CMD_SET_VALUE(&scmd, value, strlen(value));
     scmd.operation = LCB_SET;
@@ -71,12 +76,11 @@ main(int, char **)
 
     lcb_N1QLPARAMS *params = lcb_n1p_new();
 
-    lcb_CMDN1QL cmd = { 0 };
+    lcb_CMDN1QL cmd = {};
     RowList rows;
     cmd.callback = query_callback;
 
-    rc = lcb_n1p_setstmtz(params,
-        "SELECT name, email, random FROM default WHERE $1 IN name");
+    rc = lcb_n1p_setstmtz(params, "SELECT name, email, random FROM default WHERE $1 IN name");
     // -1 for length indicates nul-terminated string
     rc = lcb_n1p_posparam(params, "\"Brass\"", -1);
 
@@ -94,7 +98,7 @@ main(int, char **)
     // the newest random number (the value of RandomNumber_g). When disabled, the
     // row may or may not appear.
     for (RowList::iterator ii = rows.begin(); ii != rows.end(); ++ii) {
-        std::string& row = *ii;
+        std::string &row = *ii;
         size_t begin_pos = row.find("\"random\"");
         size_t end_pos = row.find_first_of("},", begin_pos);
         std::string row_number = row.substr(begin_pos, end_pos - begin_pos);

@@ -5,7 +5,7 @@
 #include <sstream>
 
 static int RandomNumber_g;
-typedef std::vector<std::string> RowList;
+typedef std::vector< std::string > RowList;
 
 static void query_callback(lcb_t, int, const lcb_RESPN1QL *resp)
 {
@@ -21,7 +21,7 @@ static void query_callback(lcb_t, int, const lcb_RESPN1QL *resp)
 
     // Add rows to the vector, we'll process the results in the calling
     // code.
-    RowList *rowlist = reinterpret_cast<RowList*>(resp->cookie);
+    RowList *rowlist = reinterpret_cast< RowList * >(resp->cookie);
     rowlist->push_back(std::string(resp->row, resp->nrow));
 }
 
@@ -32,20 +32,20 @@ static void storage_callback(lcb_t, int cbtype, const lcb_RESPBASE *resp)
         exit(EXIT_FAILURE);
     }
 
-    lcb_MUTATION_TOKEN *mt = reinterpret_cast<lcb_MUTATION_TOKEN*>(resp->cookie);
+    lcb_MUTATION_TOKEN *mt = reinterpret_cast< lcb_MUTATION_TOKEN * >(resp->cookie);
     *mt = *lcb_resp_get_mutation_token(cbtype, resp);
 }
 
-int
-main(int, char **)
+int main(int, char **)
 {
     lcb_t instance;
-    lcb_create_st crst;
+    lcb_create_st crst = {};
     lcb_error_t rc;
 
-    memset(&crst, 0, sizeof crst);
     crst.version = 3;
-    crst.v.v3.connstr = "couchbase://localhost/default?fetch_mutation_tokens=true";
+    crst.v.v3.connstr = "couchbase://127.0.0.1/default?fetch_mutation_tokens=true";
+    crst.v.v3.username = "testuser";
+    crst.v.v3.passwd = "password";
 
     rc = lcb_create(&instance, &crst);
     rc = lcb_connect(instance);
@@ -67,22 +67,23 @@ main(int, char **)
     sprintf(key, "user:%d", RandomNumber_g);
     char value[4096];
     sprintf(value,
-        "{"
-            "\"name\":[\"Brass\",\"Doorknob\"],"
-            "\"email\":\"brass.doorknob@juno.com\","
-            "\"random\":%d"
-        "}", RandomNumber_g);
+            "{"
+            "  \"name\":[\"Brass\",\"Doorknob\"],"
+            "  \"email\":\"brass.doorknob@juno.com\","
+            "  \"random\":%d"
+            "}",
+            RandomNumber_g);
 
     printf("Will insert new document with random number %d\n", RandomNumber_g);
 
-    lcb_CMDSTORE scmd = { 0 };
+    lcb_CMDSTORE scmd = {};
     LCB_CMD_SET_KEY(&scmd, key, strlen(key));
     LCB_CMD_SET_VALUE(&scmd, value, strlen(value));
 
     rc = lcb_store3(instance, &mt, &scmd);
     lcb_wait(instance);
 
-    lcb_CMDN1QL cmd = { 0 };
+    lcb_CMDN1QL cmd = {};
     RowList rows;
     cmd.callback = query_callback;
 
@@ -95,20 +96,18 @@ main(int, char **)
     lcb_cntl(instance, LCB_CNTL_GET, LCB_CNTL_BUCKETNAME, &bucketname);
     std::stringstream stmt;
 
-    stmt <<
-            "{"
+    stmt << "{"
             "\"statement\":\"SELECT name, email, random FROM default WHERE $1 in name\","
             "\"args\":[\"Brass\"],"
             "\"scan_consistency\":\"at_plus\",";
 
     stmt << "\"scan_vectors\":{"
-            << "\"" <<  bucketname << "\":{"
-                << "\"" <<  LCB_MUTATION_TOKEN_VB(&mt) << "\":["
-                    << LCB_MUTATION_TOKEN_SEQ(&mt) << ","
-                    << "\"" << LCB_MUTATION_TOKEN_ID(&mt) << "\""
-                << "]"
-             << "}"
-           << "}"
+         << "\"" << bucketname << "\":{"
+         << "\"" << LCB_MUTATION_TOKEN_VB(&mt) << "\":[" << LCB_MUTATION_TOKEN_SEQ(&mt) << ","
+         << "\"" << LCB_MUTATION_TOKEN_ID(&mt) << "\""
+         << "]"
+         << "}"
+         << "}"
          << "}";
 
     /*
@@ -130,7 +129,7 @@ main(int, char **)
     cmd.query = stmt_str.c_str();
     cmd.nquery = stmt_str.size();
     rc = lcb_n1ql_query(instance, &rows, &cmd);
-    assert(rc==LCB_SUCCESS);
+    assert(rc == LCB_SUCCESS);
     lcb_wait(instance);
 
     // To demonstrate the at_plus feature,
@@ -142,7 +141,7 @@ main(int, char **)
     // the newest random number (the value of RandomNumber_g). When disabled, the
     // row may or may not appear.
     for (RowList::iterator ii = rows.begin(); ii != rows.end(); ++ii) {
-        std::string& row = *ii;
+        std::string &row = *ii;
         size_t begin_pos = row.find("\"random\"");
         size_t end_pos = row.find_first_of("},", begin_pos);
         std::string row_number = row.substr(begin_pos, end_pos - begin_pos);

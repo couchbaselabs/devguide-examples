@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-static const char *ConnectionString_g = "couchbase://10.0.0.31/default";
+static const char *ConnectionString_g = "couchbase://127.0.0.1/default";
 static const char *DocID_g = "a_list";
 
 struct Result {
@@ -12,46 +12,49 @@ struct Result {
     lcb_CAS cas;
     lcb_error_t rc;
 
-    Result() : cas(0), rc(LCB_SUCCESS) {
-    }
+    Result() : cas(0), rc(LCB_SUCCESS) {}
 };
 
 static void op_callback(lcb_t, int cbtype, const lcb_RESPBASE *rb)
 {
-    Result *res = reinterpret_cast<Result*>(rb->cookie);
+    Result *res = reinterpret_cast< Result * >(rb->cookie);
     res->cas = rb->cas;
     res->rc = rb->rc;
     if (cbtype == LCB_CALLBACK_GET && rb->rc == LCB_SUCCESS) {
-        const lcb_RESPGET *rg = reinterpret_cast<const lcb_RESPGET*>(rb);
-        res->value.assign(reinterpret_cast<const char *>(rg->value), rg->nvalue);
+        const lcb_RESPGET *rg = reinterpret_cast< const lcb_RESPGET * >(rb);
+        res->value.assign(reinterpret_cast< const char * >(rg->value), rg->nvalue);
     }
 }
 
-static lcb_t
-create_instance()
+static lcb_t create_instance()
 {
     lcb_t instance;
-    lcb_create_st crst;
+    lcb_create_st crst = {};
     lcb_error_t rc;
-    memset(&crst, 0, sizeof crst);
+
     crst.version = 3;
     crst.v.v3.connstr = ConnectionString_g;
+    crst.v.v3.username = "testuser";
+    crst.v.v3.passwd = "password";
 
     rc = lcb_create(&instance, &crst);
     rc = lcb_connect(instance);
     lcb_wait(instance);
     rc = lcb_get_bootstrap_status(instance);
+    if (rc != LCB_SUCCESS) {
+        printf("Unable to bootstrap cluster: %s\n", lcb_strerror_short(rc));
+        exit(1);
+    }
 
     lcb_install_callback3(instance, LCB_CALLBACK_GET, op_callback);
     lcb_install_callback3(instance, LCB_CALLBACK_STORE, op_callback);
     return instance;
 }
 
-static std::string
-add_item_to_list(const std::string& old_list, const std::string& new_item)
+static std::string add_item_to_list(const std::string &old_list, const std::string &new_item)
 {
     // Remove the trailing ']'
-    std::string newval = old_list.substr(0, old_list.size()-1);
+    std::string newval = old_list.substr(0, old_list.size() - 1);
 
     if (old_list.size() != 2) {
         // The current value is not an empty list. Insert preceding comma
@@ -63,12 +66,11 @@ add_item_to_list(const std::string& old_list, const std::string& new_item)
     return newval;
 }
 
-static void *
-thread_func_unsafe(void *arg)
+static void *thread_func_unsafe(void *arg)
 {
     lcb_error_t rc;
     lcb_t instance = create_instance();
-    lcb_CMDGET gcmd = { 0 };
+    lcb_CMDGET gcmd = {};
 
     LCB_CMD_SET_KEY(&gcmd, DocID_g, strlen(DocID_g));
     lcb_sched_enter(instance);
@@ -77,10 +79,10 @@ thread_func_unsafe(void *arg)
     lcb_sched_leave(instance);
     lcb_wait(instance);
 
-    const std::string *new_item = reinterpret_cast<const std::string*>(arg);
+    const std::string *new_item = reinterpret_cast< const std::string * >(arg);
     std::string newval = add_item_to_list(res.value, *new_item);
 
-    lcb_CMDSTORE scmd = { 0 };
+    lcb_CMDSTORE scmd = {};
     scmd.operation = LCB_REPLACE;
     LCB_CMD_SET_KEY(&scmd, DocID_g, strlen(DocID_g));
     LCB_CMD_SET_VALUE(&scmd, newval.c_str(), newval.size());
@@ -90,21 +92,19 @@ thread_func_unsafe(void *arg)
     lcb_wait(instance);
 
     if (res.rc != LCB_SUCCESS) {
-        printf("Couldn't store new item %s. %s\n",
-            new_item->c_str(), lcb_strerror(NULL, rc));
+        printf("Couldn't store new item %s. %s\n", new_item->c_str(), lcb_strerror(NULL, rc));
     }
     lcb_destroy(instance);
     return NULL;
 }
 
-static void *
-thread_func_safe(void *arg)
+static void *thread_func_safe(void *arg)
 {
     lcb_error_t rc;
     lcb_t instance = create_instance();
 
     while (true) {
-        lcb_CMDGET gcmd = { 0 };
+        lcb_CMDGET gcmd = {};
         LCB_CMD_SET_KEY(&gcmd, DocID_g, strlen(DocID_g));
         lcb_sched_enter(instance);
         Result res;
@@ -112,11 +112,11 @@ thread_func_safe(void *arg)
         lcb_sched_leave(instance);
         lcb_wait(instance);
 
-        const std::string *new_item = reinterpret_cast<const std::string*>(arg);
+        const std::string *new_item = reinterpret_cast< const std::string * >(arg);
         // Remove the trailing ']'
         std::string newval = add_item_to_list(res.value, *new_item);
 
-        lcb_CMDSTORE scmd = { 0 };
+        lcb_CMDSTORE scmd = {};
         scmd.operation = LCB_REPLACE;
 
         // Assign the CAS from the previous result
@@ -135,8 +135,7 @@ thread_func_safe(void *arg)
             printf("CAS Mismatch for %s. Retrying..\n", new_item->c_str());
             continue;
         } else {
-            printf("Couldn't store new item %s. %s\n",
-                new_item->c_str(), lcb_strerror(NULL, rc));
+            printf("Couldn't store new item %s. %s\n", new_item->c_str(), lcb_strerror(NULL, rc));
         }
     }
 
@@ -145,12 +144,11 @@ thread_func_safe(void *arg)
 }
 
 // Boilerplate for storing our initial list as '[]'
-static void
-store_initial_list(lcb_t instance)
+static void store_initial_list(lcb_t instance)
 {
     lcb_error_t rc;
 
-    lcb_CMDSTORE scmd = { 0 };
+    lcb_CMDSTORE scmd = {};
     LCB_CMD_SET_KEY(&scmd, DocID_g, strlen(DocID_g));
     LCB_CMD_SET_VALUE(&scmd, "[]", 2);
     scmd.operation = LCB_SET;
@@ -158,6 +156,9 @@ store_initial_list(lcb_t instance)
     Result res;
     lcb_sched_enter(instance);
     rc = lcb_store3(instance, &res, &scmd);
+    if (rc != LCB_SUCCESS) {
+        printf("Couldn't schedule store operation: %s\n", lcb_strerror_short(rc));
+    }
     lcb_sched_leave(instance);
     lcb_wait(instance);
     if (res.rc != LCB_SUCCESS) {
@@ -167,8 +168,7 @@ store_initial_list(lcb_t instance)
 
 // Counts the number of items in the list. Because we don't want to depend
 // on a full-blown JSON parser, we just count the number of commas
-static int
-count_list_items(const std::string& s)
+static int count_list_items(const std::string &s)
 {
     size_t pos = 0;
     int num_items = 0;
@@ -187,15 +187,14 @@ count_list_items(const std::string& s)
     return num_items;
 }
 
-int
-main(int, char **)
+int main(int, char **)
 {
     lcb_error_t rc;
     lcb_t instance = create_instance();
     store_initial_list(instance);
 
     pthread_t threads[10];
-    std::vector<std::string> items;
+    std::vector< std::string > items;
 
     for (int i = 0; i < 10; i++) {
         char buf[32];
@@ -213,11 +212,15 @@ main(int, char **)
     }
 
     Result res;
-    lcb_CMDGET gcmd = { 0 };
+    lcb_CMDGET gcmd = {};
     LCB_CMD_SET_KEY(&gcmd, DocID_g, strlen(DocID_g));
 
     lcb_sched_enter(instance);
     rc = lcb_get3(instance, &res, &gcmd);
+    if (rc != LCB_SUCCESS) {
+        printf("Failed to schedule get operation: %s\n", lcb_strerror_short(rc));
+        exit(1);
+    }
     lcb_sched_leave(instance);
     lcb_wait(instance);
 

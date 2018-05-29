@@ -3,33 +3,30 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#define sleep(s) Sleep(s/1000)
+#define sleep(s) Sleep(s / 1000)
 #else
 #include <unistd.h>
 #endif
 
-static void
-op_callback(lcb_t, int cbtype, const lcb_RESPBASE *resp)
+static void op_callback(lcb_t, int cbtype, const lcb_RESPBASE *resp)
 {
     if (resp->rc == LCB_SUCCESS) {
         printf("Operation (type=%d) OK\n", cbtype);
     } else {
-        printf("Operation (type=%d) Failed (%s)\n",
-            cbtype, lcb_strerror(NULL, resp->rc));
+        printf("Operation (type=%d) Failed (%s)\n", cbtype, lcb_strerror(NULL, resp->rc));
     }
 
     if (cbtype == LCB_CALLBACK_GET) {
-        const lcb_RESPGET *rg = reinterpret_cast<const lcb_RESPGET*>(resp);
+        const lcb_RESPGET *rg = reinterpret_cast< const lcb_RESPGET * >(resp);
         if (resp->rc == LCB_SUCCESS) {
-            printf("Got value %.*s\n", (int)rg->nvalue, rg->value);
+            printf("Got value %.*s\n", (int)rg->nvalue, (char *)rg->value);
         }
     }
 }
 
-static void
-store_key(lcb_t instance, const char *key, const char *value, unsigned exp=0)
+static void store_key(lcb_t instance, const char *key, const char *value, unsigned exp = 0)
 {
-    lcb_CMDSTORE scmd = { 0 };
+    lcb_CMDSTORE scmd = {0};
     LCB_CMD_SET_KEY(&scmd, key, strlen(key));
     LCB_CMD_SET_VALUE(&scmd, value, strlen(value));
     scmd.exptime = exp; // Only live for 2 seconds!
@@ -41,8 +38,7 @@ store_key(lcb_t instance, const char *key, const char *value, unsigned exp=0)
     lcb_wait(instance);
 }
 
-static void
-get_or_touch(lcb_t instance, const char *key, unsigned exp=0, bool get=false)
+static void get_or_touch(lcb_t instance, const char *key, unsigned exp = 0, bool get = false)
 {
     union {
         lcb_CMDBASE base;
@@ -67,21 +63,25 @@ get_or_touch(lcb_t instance, const char *key, unsigned exp=0, bool get=false)
     lcb_wait(instance);
 }
 
-int
-main(int, char **)
+int main(int, char **)
 {
     lcb_t instance;
-    lcb_create_st crst;
+    lcb_create_st crst = {};
     lcb_error_t rc;
 
-    memset(&crst, 0, sizeof crst);
     crst.version = 3;
-    crst.v.v3.connstr = "couchbase://10.0.0.31/default";
+    crst.v.v3.connstr = "couchbase://127.0.0.1/default";
+    crst.v.v3.username = "testuser";
+    crst.v.v3.passwd = "password";
 
     rc = lcb_create(&instance, &crst);
     rc = lcb_connect(instance);
     lcb_wait(instance);
     rc = lcb_get_bootstrap_status(instance);
+    if (rc != LCB_SUCCESS) {
+        printf("Unable to bootstrap cluster: %s\n", lcb_strerror_short(rc));
+        exit(1);
+    }
 
     // You can actually use the same callback for multiple types of operations.
     // The second parameter is the type of callback being invoked. You can
