@@ -1,0 +1,19 @@
+This example demonstrates how to use field encryption API.
+
+The application requires OpenSSL with development headers installed in the system.
+
+* openssl_symmetric_provider.c: sample implementation of crypto provider.
+  Note that it uses insecure way to store keys (i.e. hardcoded into binary).
+  Production system have to use reliable and secure means for key management.
+
+* openssl_symmetric_encrypt.c: sample application, demonstrating encryption of the
+  documents
+
+* openssl_symmetric_decrypt.c: sample application, demonstrating decryption of the
+  documents
+
+To try the example, use Makefile to build the binary and then execute it:
+
+    $ make
+    $ ./openssl_symmetric_encrypt couchbase://localhost password Administrator
+    $ ./openssl_symmetric_decrypt couchbase://localhost password Administrator
