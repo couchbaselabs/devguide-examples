@@ -68,10 +68,31 @@ openssl req -new -key ${INTERMEDIATE}.key -out ${INTERMEDIATE}.csr \
 
 # Create the extension file v3_ca.ext; in order to add extensions to the
 # certificate, and to generate the certificate signing-request: 
-cat <<EOF>> ./v3_ca.ext
+cat <<EOF>> ../v3_ca.ext
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid:always,issuer:always
 basicConstraints = CA:true
+EOF
+
+# Create open ssl configuration file to add Subject Alternative Names
+# Add the server IP or DOMAIN in "alt_names"
+cat <<EOF>> ../openssl.cnf
+[req]
+x509_extensions = v3_req
+distinguished_name = req_distinguished_name
+
+[req_distinguished_name]
+
+[ v3_req ]
+
+# Extensions to add to a certificate request
+
+basicConstraints = CA:true
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+IP.1 = ${ip}
 EOF
 
 # Generate the intermediate public key (int.pem), based on the intermediate
@@ -79,7 +100,7 @@ EOF
 # (ca.pem). 
 openssl x509 -req -in ${INTERMEDIATE}.csr \
   -CA ../${ROOT_DIR}/${ROOT_CA}.pem -CAkey ../${ROOT_DIR}/${ROOT_CA}.key \
-  -CAcreateserial -CAserial ../${ROOT_DIR}/rootCA.srl -extfile ./v3_ca.ext \
+  -CAcreateserial -CAserial ../${ROOT_DIR}/rootCA.srl -extfile ../v3_ca.ext \
   -out ${INTERMEDIATE}.pem -days 365
 
 # Generate, first, the node private key (pkey.key); secondly, the node
@@ -91,7 +112,7 @@ openssl req -new -key ${NODE}.key -out ${NODE}.csr \
   -subj "/C=UA/O=MyCompany/CN=${USERNAME}"
 openssl x509 -req -in ${NODE}.csr -CA ../${INT_DIR}/${INTERMEDIATE}.pem \
   -CAkey ../${INT_DIR}/${INTERMEDIATE}.key -CAcreateserial \
-  -CAserial ../${INT_DIR}/intermediateCA.srl -out ${NODE}.pem -days 365
+  -CAserial ../${INT_DIR}/intermediateCA.srl -out ${NODE}.pem -days 365 -extfile ../openssl.cnf -extensions 'v3_req'
 
 # Generate the certificate chain-file, by concatenating the node and
 # intermediate certificates. This allows the client to verify the intermediate
@@ -127,3 +148,12 @@ $CB_ROOT/bin/couchbase-cli ssl-manage -c ${ip}:8091 -u ${ADMINNAME} -p ${ADMINPA
   --upload-cluster-ca=./${ROOT_DIR}/${ROOT_CA}.pem
 $CB_ROOT/bin/couchbase-cli ssl-manage -c ${ip}:8091 -u ${ADMINNAME} -p ${ADMINPASS} \
   --set-node-certificate
+
+# Enable Client Certificate
+cat <<EOF>> conf.json
+{"state": "enable","prefixes": [{"path": "subject.cn","prefix": "","delimiter": ""}]}
+EOF
+
+$CB_ROOT/bin/couchbase-cli ssl-manage -c ${ip}:8091 -u ${ADMINNAME} -p ${ADMINPASS} \
+  --set-client-auth conf.json
+
