@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>DevGuide.FieldEncryption</StartupObject>
+    <StartupObject>DevGuide.FieldEncryptionAes</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
@@ -48,11 +48,11 @@
       <HintPath>packages\Common.Logging.Log4Net1213.3.3.1\lib\net40\Common.Logging.Log4Net1213.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Couchbase.Extensions.Encryption, Version=1.0.0.2, Culture=neutral, PublicKeyToken=05e9c6b5a9ec94c2, processorArchitecture=MSIL">
-      <HintPath>packages\Couchbase.Extensions.Encryption.1.0.0-beta\lib\net45\Couchbase.Extensions.Encryption.dll</HintPath>
+    <Reference Include="Couchbase.Extensions.Encryption, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Couchbase.Extensions.Encryption.1.0.0-beta2\lib\net45\Couchbase.Extensions.Encryption.dll</HintPath>
     </Reference>
-    <Reference Include="Couchbase.NetClient, Version=2.5.9.0, Culture=neutral, PublicKeyToken=05e9c6b5a9ec94c2, processorArchitecture=MSIL">
-      <HintPath>packages\CouchbaseNetClient.2.5.9\lib\net45\Couchbase.NetClient.dll</HintPath>
+    <Reference Include="Couchbase.NetClient, Version=2.6.0.0, Culture=neutral, PublicKeyToken=05e9c6b5a9ec94c2, processorArchitecture=MSIL">
+      <HintPath>packages\CouchbaseNetClient.2.6.0-beta\lib\net45\Couchbase.NetClient.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
@@ -80,7 +80,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncExample.cs" />
-    <Compile Include="FieldEncryption.cs" />
+    <Compile Include="FieldEncryptionAes.cs" />
+    <Compile Include="FieldEncryptionRsa.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="SyncExample.cs" />
     <Compile Include="AsyncBatch.cs" />
     <Compile Include="ConnectionConfig.cs" />
@@ -100,6 +103,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="public_privatekey.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />

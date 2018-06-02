@@ -5,10 +5,11 @@ using Couchbase.Configuration.Client;
 using Couchbase.Extensions.Encryption;
 using Couchbase.Extensions.Encryption.Providers;
 using Couchbase.Extensions.Encryption.Stores;
+using Newtonsoft.Json;
 
 namespace DevGuide
 {
-    public class FieldEncryption : ConnectionBase
+    public class FieldEncryptionAes : ConnectionBase
     {
         public override async Task ExecuteAsync()
         {
@@ -32,7 +33,7 @@ namespace DevGuide
             //If the document is fetched as a string or dynamic it will by-pass decryption so we
             //can see how the document is stored within Couchbase without triggering decryption
             var encrypted = await _bucket.GetAsync<dynamic>("person::1").ConfigureAwait(false);
-            Console.WriteLine(encrypted);
+            Console.WriteLine(JsonConvert.SerializeObject(encrypted.Value, Formatting.Indented));
 
             //Fetching the document will reverse the encryption process so Password at the
             //application only will be in plaintext. In transport and in storage it will encrypted.
@@ -40,6 +41,7 @@ namespace DevGuide
             if (get.Success)
             {
                 Console.WriteLine(Environment.NewLine + "Fetched decrypted Person.Password...");
+                Console.WriteLine(get.Value);
             }
 
             Console.Read();
@@ -47,7 +49,7 @@ namespace DevGuide
 
         static void Main(string[] args)
         {
-            new FieldEncryption().ExecuteAsync().Wait();
+            new FieldEncryptionAes().ExecuteAsync().Wait();
         }
 
         protected override ClientConfiguration GetConnectionConfig()
@@ -75,14 +77,14 @@ namespace DevGuide
 
             //Get the config and enable field encryption
             var config = base.GetConnectionConfig();
-            config.EnableFieldEncryption(cryptoProvider);
+            config.EnableFieldEncryption("MyAESProvider", cryptoProvider);
             return config;
         }
 
-        public class Person
+        private class Person
         {
             //Annotate the field to be encrypted
-            [EncryptedField(Provider = "AES-256-HMAC-SHA256")]
+            [EncryptedField(Provider = "MyAESProvider")]
             public string Password { get; set; }
 
             //The rest will be transported and stored unencrypted
@@ -90,6 +92,11 @@ namespace DevGuide
             public string LastName { get; set; }
             public string UserName { get; set; }
             public int Age { get; set; }
+
+            public override string ToString()
+            {
+                return JsonConvert.SerializeObject(this, Formatting.Indented);
+            }
         }
     }
 }
