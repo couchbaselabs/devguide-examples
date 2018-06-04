@@ -176,7 +176,7 @@ Some SDKs provide APIs to determine how many nodes are in the cluster, while som
 [.NET](dotnet/Durability.cs) |
 Go |
 node.js |
-PHP
+[PHP](php/durability.php)
 
 ## Sub-Document Operations
 
@@ -267,7 +267,7 @@ Java |
 .NET |
 Go |
 node.js |
-PHP
+[PHP](php/query-consistency.php)
 
 ### Query - Better Reuse of Queries with adhoc(false) and Prepared Statements
 This example should demonstrate best practice when a statement is to be reused heavily. Setting the `adhoc` N1QL query tuning to `false` will use Prepared Statements in the background, which is useful in such a case. Note how this works with placeholders (but of course simple statements work too).
@@ -345,7 +345,7 @@ whether it exists or not
 Go |
 node.js |
 Java |
-[PHP](php/durability.php)
+PHP
 
 
 ## Development and Branching
