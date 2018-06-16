@@ -42,9 +42,9 @@ to Couchbase Server 4.5, and so on.
   * [Query - Ensuring all documents are the latest (scan consistency)](#query---ensuring-all-documents-are-the-latest-scan-consistency)
   * [Query - Better reuse of queries with adhoc(false) and Prepared Statements](#query---better-reuse-of-queries-with-adhocfalse-and-prepared-statements)
   * [Query - UPDATE and DELETE](#query---update-and-delete)
-- Field Encryption
-  * [Symmetric Key Encryption (AES)](#symmetric-key-encryption)
-  * [Asymmetric Key Encryption (RSA)](#asymmetric-key-encryption)
+- [Field Encryption](#field-encryption)
+  * [Symmetric Key Encryption (AES)](#symmetric-key-encryption-aes)
+  * [Asymmetric Key Encryption (RSA)](#asymmetric-key-encryption-rsa)
 
 <!-- tocstop -->
 
