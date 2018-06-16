@@ -42,6 +42,9 @@ to Couchbase Server 4.5, and so on.
   * [Query - Ensuring all documents are the latest (scan consistency)](#query---ensuring-all-documents-are-the-latest-scan-consistency)
   * [Query - Better reuse of queries with adhoc(false) and Prepared Statements](#query---better-reuse-of-queries-with-adhocfalse-and-prepared-statements)
   * [Query - UPDATE and DELETE](#query---update-and-delete)
+- Field Encryption
+  * [Symmetric Key Encryption (AES)](#symmetric-key-encryption)
+  * [Asymmetric Key Encryption (RSA)](#asymmetric-key-encryption)
 
 <!-- tocstop -->
 
@@ -347,6 +350,31 @@ node.js |
 Java |
 PHP
 
+## Field Encryption
+
+### Symmetric Key Encryption (AES)
+
+An example of Symmetric Key encryption using AES-256 and SHA256 signing to encrypt fields within a document.
+
+C |
+Python |
+[.NET](dotnet/FieldEncryptionAes.cs) |
+Go |
+node.js |
+Java |
+PHP
+
+### Asymmetric Key Encryption (RSA)
+
+An example of field field encryption using the Asymmetric Key RSA-2048 algorithm and OAEP-SHA1 padding.
+
+C |
+Python |
+[.NET](dotnet/FieldEncryptionRsa.cs) |
+Go |
+node.js |
+Java |
+PHP
 
 ## Development and Branching
 
