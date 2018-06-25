@@ -9,13 +9,14 @@ use Couchbase\Bucket;
 
 final class InsecureKeyProvider implements KeyProvider
 {
-    public function getKey(int $type, string $id)
+    public function getKey(string $id)
     {
+        $root = dirname(__FILE__);
         switch ($id) {
-        case 'mypublickey':
-            return "!mysecretkey#9^5usdk39d&dlf)03sL";
-        case 'HMAC_KEY_ID':
-            return 'myauthpassword';
+        case 'MyPublicKeyName':
+            return file_get_contents("$root/../../etc/field-level-encryption/publickey.cer");
+        case 'MyPrivateKeyName':
+            return file_get_contents("$root/../../etc/field-level-encryption/private.key");
         default:
             throw new InvalidArgumentException("Unknown key '$id");
         }
@@ -26,8 +27,8 @@ $cluster = new Cluster('couchbase://localhost');
 $cluster->authenticateAs('Administrator', 'password');
 $bucket = $cluster->openBucket('default');
 $bucket->registerCryptoProvider(
-    'AES-256-HMAC-SHA256',
-    new Aes256HmacSha256Provider(new InsecureKeyProvider(), "HMAC_KEY_ID")
+    'RSA-2048-OAEP-SHA1',
+    new Aes256HmacSha256Provider(new InsecureKeyProvider(), "MyPublicKeyName", "MyPrivateKeyName")
 );
 
 
@@ -38,13 +39,12 @@ $document = [
 
 // lets encrypt everything stored in the 'message' property using key with ID
 // 'mypyblickey' and our crypto provider.
-$encrypted = $bucket->encryptDocument(
+$encrypted = $bucket->encryptFields(
     $document,
     [
         [
             'name' => 'message',
-            'kid' => 'mypublickey',
-            'alg' => 'AES-256-HMAC-SHA256'
+            'alg' => 'RSA-2048-OAEP-SHA1'
         ]
     ]
 );
@@ -60,19 +60,27 @@ var_dump($document);
 //      ["__crypt_message"]=>
 //      object(stdClass)#8 (5) {
 //        ["alg"]=>
-//        string(19) "AES-256-HMAC-SHA256"
+//        string(18) "RSA-2048-OAEP-SHA1"
 //        ["ciphertext"]=>
-//        string(88) "aK1RxvZkP4YWyMapQTpiRKvAG6V1MsFWUJwNfY7TXh3d5DdFO3jwmQu3rFMN6p98Y4ziM+pQNkrB/Cc7GP9/yw=="
+//        string(88) "uY14lwNqKQSZCNPc23h8dXgLbkj6hrWG5wA+9swPJQmuqOXUUr4YI9IE6a5vplG8z7XUnrmrpeG2y/85hu2zDg=="
 //        ["iv"]=>
-//        string(24) "1tzdgObtNJmNOrgSImzdKg=="
+//        string(24) "n+ijNQiRYaTyguGoh7plCQ=="
 //        ["kid"]=>
-//        string(11) "mypublickey"
+//        string(15) "MyPublicKeyName"
 //        ["sig"]=>
-//        string(44) "qStQ7U28A05nz/ZP5SKDSMQuMofy1K9QHX8nYALLwOo="
+//        string(44) "PJGt++Yz74QcMclan0p97l1dkBlMuCidH2OlSpYrBeU="
 //      }
 //    }
 
-$decrypted = $bucket->decryptDocument($document);
+$decrypted = $bucket->decryptFields(
+    $document,
+    [
+        [
+            'name' => 'message',
+            'alg' => 'RSA-2048-OAEP-SHA1'
+        ]
+    ]
+);
 var_dump($decrypted);
 // now we have our document readable
 // => array(1) {

@@ -362,7 +362,7 @@ Python |
 Go |
 node.js |
 Java |
-PHP
+[PHP](php/encryption/demo-symmetric.php)
 
 ### Asymmetric Key Encryption (RSA)
 
@@ -374,7 +374,7 @@ Python |
 Go |
 node.js |
 Java |
-PHP
+[PHP](php/encryption/demo-asymmetric.php)
 
 ## Development and Branching
 

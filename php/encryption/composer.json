@@ -14,6 +14,7 @@
     ],
     "minimum-stability": "stable",
     "scripts": {
-        "demo": "@php ./demo.php"
+        "demo-symmetric": "@php ./demo-symmetric.php",
+        "demo-asymmetric": "@php ./demo-asymmetric.php"
     }
 }
