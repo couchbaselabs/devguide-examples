@@ -356,7 +356,7 @@ PHP
 
 An example of Symmetric Key encryption using AES-256 and SHA256 signing to encrypt fields within a document.
 
-C |
+[C](c/encryption/openssl_symmetric_provider.c) |
 Python |
 [.NET](dotnet/FieldEncryptionAes.cs) |
 Go |
@@ -368,7 +368,7 @@ Java |
 
 An example of field field encryption using the Asymmetric Key RSA-2048 algorithm and OAEP-SHA1 padding.
 
-C |
+[C](c/encryption/openssl_asymmetric_provider.c) |
 Python |
 [.NET](dotnet/FieldEncryptionRsa.cs) |
 Go |

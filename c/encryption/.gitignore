@@ -1,0 +1,4 @@
+openssl_asymmetric_decrypt
+openssl_asymmetric_encrypt
+openssl_symmetric_decrypt
+openssl_symmetric_encrypt
