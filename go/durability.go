@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/couchbase/gocb"
 	"time"
+
+	"github.com/couchbase/gocb"
 )
 
 // bucket reference - reuse as bucket reference in the application
@@ -13,12 +14,12 @@ func main() {
 	// Connect to Cluster
 	cluster, err := gocb.Connect("couchbase://127.0.0.1")
 	if err != nil {
-		fmt.Println("ERRROR CONNECTING TO CLUSTER:", err)
+		fmt.Println("ERROR CONNECTING TO CLUSTER:", err)
 	}
 	// Open Bucket
 	bucket, err = cluster.OpenBucket("travel-sample", "")
 	if err != nil {
-		fmt.Println("ERRROR OPENING BUCKET:", err)
+		fmt.Println("ERROR OPENING BUCKET:", err)
 	}
 	// Set Durability Timeout to 3 seconds, default is 40 seconds
 	bucket.SetDurabilityTimeout(3 * time.Second)
@@ -38,7 +39,7 @@ func main() {
 	var retValue interface{}
 	_, err = bucket.Get(key, &retValue)
 	if err != nil {
-		fmt.Println("ERRROR RETURNING DOCUMENT:", err)
+		fmt.Println("ERROR RETURNING DOCUMENT:", err)
 	}
 	fmt.Println("Document Retrieved:", retValue)
 
@@ -60,7 +61,7 @@ func main() {
 	// still written.
 	_, err = bucket.Get(key, &retValue)
 	if err != nil {
-		fmt.Println("ERRROR RETURNING DOCUMENT:", err)
+		fmt.Println("ERROR RETURNING DOCUMENT:", err)
 	}
 	fmt.Println("Document Retrieved:", retValue)
 
@@ -83,7 +84,7 @@ func main() {
 	// still written.
 	_, err = bucket.Get(key, &retValue)
 	if err != nil {
-		fmt.Println("ERRROR RETURNING DOCUMENT:", err)
+		fmt.Println("ERROR RETURNING DOCUMENT:", err)
 	}
 	fmt.Println("Document Retrieved:", retValue)
 

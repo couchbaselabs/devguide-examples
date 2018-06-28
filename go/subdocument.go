@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/couchbase/gocb"
 )
 
@@ -19,32 +20,32 @@ func main() {
 	// Connect to Cluster
 	cluster, err := gocb.Connect("couchbase://127.0.0.1")
 	if err != nil {
-		fmt.Println("ERRROR CONNECTING TO CLUSTER:", err)
+		fmt.Println("ERROR CONNECTING TO CLUSTER:", err)
 	}
 	// Open Bucket
 	bucket, err = cluster.OpenBucket("travel-sample", "")
 	if err != nil {
-		fmt.Println("ERRROR OPENING BUCKET:", err)
+		fmt.Println("ERROR OPENING BUCKET:", err)
 	}
 	// Create a document
 	key := "goDevguideExampleSubdoc"
 	val := Doc{"Some Test Field Data for firstItem", "Some Test Field Data for secondItem", "Some Test Field Data for thirdItem"}
 	_, err = bucket.Upsert(key, &val, 0)
 	if err != nil {
-		fmt.Println("ERRROR CREATING DOCUMENT:", err)
+		fmt.Println("ERROR CREATING DOCUMENT:", err)
 	}
 	// Retrieve Full Document, Get operation
 	var retValue interface{}
 	_, err = bucket.Get(key, &retValue)
 	if err != nil {
-		fmt.Println("ERRROR RETURNING DOCUMENT:", err)
+		fmt.Println("ERROR RETURNING DOCUMENT:", err)
 	}
 	fmt.Println("Document Retrieved:", retValue)
 
 	// Subdoc Operation: Retrieve Document Fragment for two fields, using LookupIn
 	frag, err := bucket.LookupIn("goDevguideExampleSubdoc").Get("secondItem").Get("thirdItem").Execute()
 	if err != nil {
-		fmt.Println("ERRROR RETURNING DOCUMENT FRAGMENT:", err)
+		fmt.Println("ERROR RETURNING DOCUMENT FRAGMENT:", err)
 	}
 	// Print results
 	frag.Content("firstItem", &retValue)
@@ -57,12 +58,12 @@ func main() {
 		Upsert("fourthItem", []string{"250 GT SWB", "250 GTO", "250 LM", "275 GTB"}, true).
 		Execute()
 	if err != nil {
-		fmt.Println("ERRROR ADDING DOCUMENT FRAGMENT:", err)
+		fmt.Println("ERROR ADDING DOCUMENT FRAGMENT:", err)
 	}
 	// LookupIn to retrieve the changes
 	frag, err = bucket.LookupIn("goDevguideExampleSubdoc").Get("fourthItem").Execute()
 	if err != nil {
-		fmt.Println("ERRROR RETURNING DOCUMENT FRAGMENT:", err)
+		fmt.Println("ERROR RETURNING DOCUMENT FRAGMENT:", err)
 	}
 	frag.Content("fourthItem", &retValue)
 	fmt.Println("Document Fragment Retrieved (fourthItem):", retValue)
@@ -76,12 +77,12 @@ func main() {
 		AddUnique("fourthItem", "288 GTO", false).
 		Execute()
 	if err != nil {
-		fmt.Println("ERRROR ADDING DOCUMENT FRAGMENT:", err)
+		fmt.Println("ERROR ADDING DOCUMENT FRAGMENT:", err)
 	}
 	// LookupIn to retrieve the changes
 	frag, err = bucket.LookupIn("goDevguideExampleSubdoc").Get("fourthItem").Execute()
 	if err != nil {
-		fmt.Println("ERRROR RETURNING DOCUMENT FRAGMENT:", err)
+		fmt.Println("ERROR RETURNING DOCUMENT FRAGMENT:", err)
 	}
 	frag.Content("fourthItem", &retValue)
 	fmt.Println("Document Fragment Retrieved (fourthItem):", retValue)
@@ -89,12 +90,12 @@ func main() {
 	// Subdoc Operation: Remove a value from the fourthItem Array
 	frag, err = bucket.MutateIn("goDevguideExampleSubdoc", 0, 0).Remove("fourthItem[3]").Execute()
 	if err != nil {
-		fmt.Println("ERRROR ADDING DOCUMENT FRAGMENT:", err)
+		fmt.Println("ERROR ADDING DOCUMENT FRAGMENT:", err)
 	}
 	// LookupIn to retrieve the changes
 	frag, err = bucket.LookupIn("goDevguideExampleSubdoc").Get("fourthItem").Execute()
 	if err != nil {
-		fmt.Println("ERRROR RETURNING DOCUMENT FRAGMENT:", err)
+		fmt.Println("ERROR RETURNING DOCUMENT FRAGMENT:", err)
 	}
 	frag.Content("fourthItem", &retValue)
 	fmt.Println("Document Fragment Retrieved (fourthItem):", retValue)
