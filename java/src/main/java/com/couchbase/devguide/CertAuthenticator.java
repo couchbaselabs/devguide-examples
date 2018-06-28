@@ -6,6 +6,7 @@ import java.util.List;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
 import com.couchbase.client.java.CouchbaseCluster;
+import com.couchbase.client.java.auth.CertAuthenticator;
 import com.couchbase.client.java.env.CouchbaseEnvironment;
 import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
 import org.apache.log4j.Logger;
@@ -20,8 +21,6 @@ public class ConnectingSsl {
 
     //=== EDIT THESE TO ADAPT TO YOUR COUCHBASE INSTALLATION ===
     public static final String bucketName = "default";
-    public static final String adminUsername = "Administrator";
-    public static final String adminPassword = "password";
     public static final List<String> nodes = Arrays.asList("127.0.0.1");
 
     //=== You need to correctly set up your JVM keystore first! ===
@@ -38,8 +37,8 @@ public class ConnectingSsl {
         //connect to the cluster using the SSL configuration, by hitting one of the given nodes
         cluster = CouchbaseCluster.create(env, nodes);
 
-	//authenticate with the cluster
-	cluster.authenticate(adminUsername, adminPassword);
+        //use the CertAuthenticator to authenticate using the keystore specified in the configuration
+        cluster.authenticate(CertAuthenticator.INSTANCE);
 
         //get a Bucket reference from the cluster to the configured bucket
         bucket = cluster.openBucket(bucketName);
