@@ -99,6 +99,7 @@
     <Compile Include="Cas.cs" />
     <Compile Include="Update.cs" />
     <Compile Include="Retrieve.cs" />
+    <Compile Include="x509CertAuthenication.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
