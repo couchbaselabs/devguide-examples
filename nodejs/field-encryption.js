@@ -1,7 +1,7 @@
 'use strict';
 
 var couchbase = require('couchbase');
-var cbfieldcrypt = require('cbfieldcrypt');
+var cbfieldcrypt = require('couchbase-encryption');
 
 var cluster = new couchbase.Cluster('couchbase://127.0.0.1');
 cluster.authenticate('Administrator', 'password');
