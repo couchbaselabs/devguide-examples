@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/airports")
 public class AirportsController {
@@ -21,6 +23,16 @@ public class AirportsController {
   @GetMapping(value = "/{id}")
   public ResponseEntity<Airport> findById(final @PathVariable("id") String id) {
     return ResponseEntity.of(repository.findById(id));
+  }
+
+  @GetMapping(value = "/all")
+  public ResponseEntity<Iterable<Airport>> findAll() {
+    return ResponseEntity.ok(repository.findAll());
+  }
+
+  @GetMapping(value = "/top10")
+  public ResponseEntity<Iterable<Airport>> findTop10() {
+    return ResponseEntity.ok(repository.findTop10());
   }
 
 }
