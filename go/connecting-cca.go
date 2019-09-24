@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/couchbase/gocb"
 	"fmt"
+
+	"gopkg.in/couchbase/gocb.v1"
 )
 
 func main() {
@@ -27,4 +28,3 @@ func main() {
 	fmt.Println("Example Successful - Exiting")
 
 }
-
