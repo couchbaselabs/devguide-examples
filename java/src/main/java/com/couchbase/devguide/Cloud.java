@@ -1,14 +1,34 @@
+/*
+ * Copyright (c) 2020 Couchbase, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.couchbase.devguide;
+
+import com.couchbase.client.core.deps.io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import com.couchbase.client.core.env.IoConfig;
+import com.couchbase.client.core.env.SecurityConfig;
 import com.couchbase.client.java.Bucket;
 import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.CouchbaseCluster;
-import com.couchbase.client.java.document.JsonDocument;
-import com.couchbase.client.java.document.json.JsonArray;
-import com.couchbase.client.java.document.json.JsonObject;
-import com.couchbase.client.java.env.CouchbaseEnvironment;
-import com.couchbase.client.java.env.DefaultCouchbaseEnvironment;
-import com.couchbase.client.java.query.N1qlQuery;
-import com.couchbase.client.java.query.N1qlQueryResult;
-import com.couchbase.client.java.query.N1qlQueryRow;
+import com.couchbase.client.java.ClusterOptions;
+import com.couchbase.client.java.Collection;
+import com.couchbase.client.java.Scope;
+import com.couchbase.client.java.env.ClusterEnvironment;
+import com.couchbase.client.java.json.JsonArray;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
+import com.couchbase.client.java.query.QueryResult;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -20,7 +40,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Example {
+import static com.couchbase.client.java.query.QueryOptions.queryOptions;
+
+/**
+ * Example of Cas (Check and Set) handling in Java for the Couchbase Developer Guide.
+ * TODO: not tested | ported from 2.x, but not tested.  See CloudConnect.java for 3.x
+ */
+
+public class Cloud {
     // Update this to your certificate.
     private static final String CERT = "-----BEGIN CERTIFICATE-----\n" +
             "MIIDFTCCAf2gAwIBAgIRANLVkgOvtaXiQJi0V6qeNtswDQYJKoZIhvcNAQELBQAw\n" +
@@ -44,7 +71,7 @@ public class Example {
 
     public static void main(String... args) throws Exception {
         // Update this to your cluster
-        String endpoint = "endpoint";
+        String endpoint = "cb.<your endpoint address>.dp.cloud.couchbase.com";
         String bucketName = "couchbasecloudbucket";
         String username = "user";
         String password = "password";
@@ -54,19 +81,21 @@ public class Example {
         trustStore.load(null, null);
         trustStore.setCertificateEntry("server", decodeCertificates(Collections.singletonList(CERT)).get(0));
 
-        CouchbaseEnvironment env = DefaultCouchbaseEnvironment.builder()
-                .sslEnabled(true)
-                .dnsSrvEnabled(true)
-                .sslTruststore(trustStore)
-                .build();
+        ClusterEnvironment env = ClusterEnvironment.builder()
+            .securityConfig(SecurityConfig.enableTls(true)
+                .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE))
+            .ioConfig(IoConfig.enableDnsSrv(true))
+            .build();
 
         // Initialize the Connection
-        Cluster cluster = CouchbaseCluster.create(env, endpoint);
-        cluster.authenticate(username, password);
-        Bucket bucket = cluster.openBucket(bucketName);
+        Cluster cluster = Cluster.connect(endpoint,
+            ClusterOptions.clusterOptions(username, password).environment(env));
+        Bucket bucket = cluster.bucket(bucketName);
+        Scope scope = bucket.defaultScope();
+        Collection collection = bucket.defaultCollection();
 
         // Create a N1QL Primary Index (but ignore if it exists)
-        bucket.bucketManager().createN1qlPrimaryIndex(true, false);
+        cluster.queryIndexes().createPrimaryIndex(bucketName, CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
 
         // Create a JSON Document
         JsonObject arthur = JsonObject.create()
@@ -75,21 +104,21 @@ public class Example {
             .put("interests", JsonArray.from("Holy Grail", "African Swallows"));
 
         // Store the Document
-        bucket.upsert(JsonDocument.create("u:king_arthur", arthur));
+        collection.upsert( "u:king_arthur", arthur);
 
         // Load the Document and print it
         // Prints Content and Metadata of the stored Document
-        System.out.println(bucket.get("u:king_arthur"));
+        System.out.println(collection.get("u:king_arthur"));
 
         // Perform a N1QL Query
-        N1qlQueryResult result = bucket.query(
-            N1qlQuery.parameterized(String.format("SELECT name FROM `%s` WHERE $1 IN interests", bucketName),
-            JsonArray.from("African Swallows"))
+        // Perform a N1QL Query
+        QueryResult result = cluster.query(
+            String.format("SELECT name FROM `%s` WHERE $1 IN interests", bucketName),
+            queryOptions().parameters(JsonArray.from("African Swallows"))
         );
 
         // Print each found Row
-        for (N1qlQueryRow row : result) {
-            // Prints {"name":"Arthur"}
+        for (JsonObject row : result.rowsAsObject()) {
             System.out.println(row);
         }
     }

@@ -1,32 +1,67 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.couchbase</groupId>
+  <groupId>com.couchbase.client.demo</groupId>
   <artifactId>devguide</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <log4j.version>1.2.17</log4j.version>
+    <slf4j.version>1.7.30</slf4j.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.couchbase.client</groupId>
       <artifactId>java-client</artifactId>
-      <version>2.7.9</version>
+      <version>3.0.8</version>
     </dependency>
+
     <dependency>
       <groupId>com.couchbase.client</groupId>
-      <artifactId>encryption</artifactId>
-      <version>2.0.1</version>
+      <artifactId>couchbase-encryption</artifactId>
+      <version>3.0.0-pre.1</version>
     </dependency>
+
+    <!-- logging dependencies -->
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
+      <version>${log4j.version}</version>
     </dependency>
+
   </dependencies>
+
+  <repositories>
+
+    <repository>
+      <id>couchbase</id>
+      <name>Couchbase Preview Repository</name>
+      <url>http://files.couchbase.com/maven2</url>
+    </repository>
+
+    <repository>
+      <id>sonatypeSnapshots</id>
+      <name>Sonatype Snapshots</name>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+
+  </repositories>
 
   <build>
     <plugins>
@@ -35,8 +70,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>8</source>
+          <target>8</target>
         </configuration>
       </plugin>
     </plugins>

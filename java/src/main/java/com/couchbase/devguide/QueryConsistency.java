@@ -1,22 +1,30 @@
+/*
+ * Copyright (c) 2020 Couchbase, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.couchbase.devguide;
 
-import static com.couchbase.client.java.query.Select.select;
-import static com.couchbase.client.java.query.dsl.Expression.x;
+import com.couchbase.client.java.json.JsonArray;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.manager.query.CreatePrimaryQueryIndexOptions;
+import com.couchbase.client.java.query.QueryOptions;
+import com.couchbase.client.java.query.QueryResult;
+import com.couchbase.client.java.query.QueryScanConsistency;
+import com.couchbase.client.java.query.QueryStatus;
 
 import java.util.Random;
-
-import com.couchbase.client.java.document.JsonDocument;
-import com.couchbase.client.java.document.JsonLongDocument;
-import com.couchbase.client.java.document.json.JsonArray;
-import com.couchbase.client.java.document.json.JsonObject;
-import com.couchbase.client.java.error.DocumentDoesNotExistException;
-import com.couchbase.client.java.query.N1qlParams;
-import com.couchbase.client.java.query.N1qlQuery;
-import com.couchbase.client.java.query.N1qlQueryResult;
-import com.couchbase.client.java.query.N1qlQueryRow;
-import com.couchbase.client.java.query.Statement;
-import com.couchbase.client.java.query.consistency.ScanConsistency;
-import com.couchbase.client.java.query.dsl.functions.MetaFunctions;
 
 /**
  * Example of N1QL Query Consistency in Java for the Couchbase Developer Guide.
@@ -27,7 +35,7 @@ public class QueryConsistency extends ConnectionBase {
     protected void doWork() {
         String key = "javaDevguideExampleQueryConsistency";
 
-        LOGGER.info("Please ensure there is a primary index on the default bucket!");
+        cluster.queryIndexes().createPrimaryIndex(bucketName, CreatePrimaryQueryIndexOptions.createPrimaryQueryIndexOptions().ignoreIfExists(true));
         Random random = new Random();
         int randomNumber = random.nextInt(10000000);
 
@@ -37,30 +45,17 @@ public class QueryConsistency extends ConnectionBase {
                 .put("email", "brass.doorknob@juno.com")
                 .put("random", randomNumber);
         //upsert it with the corresponding random key
-        JsonDocument doc = JsonDocument.create(key, user); //the same document will be updated with a random internal value
-        bucket.upsert(doc);
-
-        //immediately query N1QL (note we imported relevant static methods)
-        //prepare the statement
-        Statement statement = select("name", "email", "random", "META(default).id")
-                .from("default")
-                .where(x("$1").in("name"));
-
-        //configure the query
-        N1qlParams params = N1qlParams.build()
-                //If this line is removed, the latest 'random' field might not be present
-                .consistency(ScanConsistency.REQUEST_PLUS);
-
-        N1qlQuery query = N1qlQuery.parameterized(statement, JsonArray.from("Brass"), params);
+        bucket.defaultCollection().upsert(key, user);
 
         LOGGER.info("Expecting random: " + randomNumber);
-        N1qlQueryResult result = bucket.query(query);
-        if (!result.finalSuccess() || result.allRows().isEmpty()) {
-            LOGGER.warn("No result/errors: " + result.errors().toString());
+        QueryResult result = cluster.query("select name, email, random, META(default).id " +
+            " from default where $1 in name",
+            QueryOptions.queryOptions().scanConsistency(QueryScanConsistency.REQUEST_PLUS).parameters(JsonArray.from("Brass")));
+        if (!result.metaData().status().equals(QueryStatus.SUCCESS) ) {
+            LOGGER.warn("No result/errors: " + result.metaData().warnings());
         }
 
-        for (N1qlQueryRow queryRow : result) {
-            JsonObject row = queryRow.value();
+        for (JsonObject row : result.rowsAsObject()) {
             int rowRandom = row.getInt("random");
             String rowId = row.getString("id");
 
@@ -74,7 +69,7 @@ public class QueryConsistency extends ConnectionBase {
             }
 
             if (System.getProperty("REMOVE_DOORKNOBS") != null || System.getenv("REMOVE_DOORKNOBS") != null) {
-                bucket.remove(rowId);
+                bucket.defaultCollection().remove(rowId);
             }
         }
     }

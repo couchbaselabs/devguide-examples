@@ -1,64 +1,94 @@
+/*
+ * Copyright (c) 2020 Couchbase, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.couchbase.devguide;
 
-import com.couchbase.client.java.document.json.JsonObject;
-import com.couchbase.client.java.query.N1qlParams;
-import com.couchbase.client.java.query.N1qlQuery;
-import com.couchbase.client.java.query.N1qlQueryResult;
-import com.couchbase.client.java.query.N1qlQueryRow;
-import com.couchbase.client.java.query.ParameterizedN1qlQuery;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.query.QueryOptions;
+
+import java.util.List;
 
 /**
- * Example of Querying with N1QL and its Prepared Statement feature, in Java for the Couchbase Developer Guide.
+ * Example of Querying using placeholders with N1QL in Java for the Couchbase Developer Guide.
  */
 public class QueryPrepared extends ConnectionBase {
 
-    private static final String PLACEHOLDER_STATEMENT = "SELECT airportname FROM `travel-sample` WHERE city=$city AND type=\"airport\"";
+    private static final String PLACEHOLDER_STATEMENT = "SELECT airportname FROM `travel-sample` WHERE city=$1 AND type=\"airport\"";
 
-    private N1qlQueryResult queryCity(String city, boolean optimize) {
+    private List<JsonObject> queryCity(String city) {
         //the placeholder values can be provided as a JSON array (if using $1 syntax)
         // or map-like JSON object (if using $name syntax)
-        JsonObject placeholderValues = JsonObject.create().put("city", city);
-
-        //the N1qlParams.adhoc(false) is used to trigger server-side optimizations, namely preparing
-        // the query and reusing the prepared data on subsequent calls
-        N1qlParams params = N1qlParams.build().adhoc(!optimize);
-
-        ParameterizedN1qlQuery query = N1qlQuery.parameterized(PLACEHOLDER_STATEMENT, placeholderValues, params);
-        return bucket.query(query);
+        JsonObject placeholderValues = JsonObject.create().put("city",city);
+        return cluster.query("SELECT airportname FROM `travel-sample` WHERE city=$1 AND type=\"airport\"",
+            QueryOptions.queryOptions().parameters(placeholderValues)).rowsAsObject();
     }
 
     @Override
     protected void doWork() {
+        JsonObject airport;
+
+        airport = JsonObject.create()
+            .put( "type", "airport")
+            .put("airportname", "Reno International Airport")
+            .put("city", "Reno")
+            .put("country", "United States");
+
+        bucket.defaultCollection().upsert("1", airport);
+
+        airport = JsonObject.create()
+            .put( "type", "airport")
+            .put("airportname", "Los Angeles International Airport")
+            .put("city", "Los Angeles")
+            .put("country", "United States");
+
+        bucket.defaultCollection().upsert("2", airport);
+
+        airport = JsonObject.create()
+            .put( "type", "airport")
+            .put("airportname", "Culver City Airport")
+            .put("city", "Los Angeles")
+            .put("country", "United States");
+
+        bucket.defaultCollection().upsert("3", airport);
+
+        airport = JsonObject.create()
+            .put( "type", "airport")
+            .put("airportname", "Dallas International Airport")
+            .put("city", "Dallas")
+            .put("country", "United States");
+
+        bucket.defaultCollection().upsert("4", airport);
+
         LOGGER.info("Airports in Reno: ");
-        N1qlQueryResult result = queryCity("Reno", true);
-        for (N1qlQueryRow row : result) {
+        for (JsonObject row : queryCity("Reno")) {
             LOGGER.info("\t" + row);
         }
-        LOGGER.info("1st query took " + result.info().executionTime());
 
-        result = queryCity("Dallas", true);
-        LOGGER.info("\nAirports in Dallas: ");
-        for (N1qlQueryRow row : result) {
+        LOGGER.info("Airports in Dallas: ");
+        for (JsonObject row : queryCity("Dallas")) {
             LOGGER.info("\t" + row);
         }
-        LOGGER.info("2nd query took " + result.info().executionTime());
 
-        LOGGER.info("\nAirports in Los Angeles: ");
-        result = queryCity("Los Angeles", true);
-        for (N1qlQueryRow row : result) {
+        LOGGER.info("Airports in Los Angeles: ");
+        for (JsonObject row : queryCity("Los Angeles")) {
             LOGGER.info("\t" + row);
         }
-        LOGGER.info("3rd query took " + result.info().executionTime());
-
-        LOGGER.info("\nCompare with unprepared (adhoc) query for Los Angeles: ");
-        LOGGER.info(queryCity("Los Angeles", false).info().executionTime());
-
-        //invalidateQueryCache empties the local cache of optimized statements, returning the previous count
-        //of such statements.
-        LOGGER.info("\nThe SDK prepared " + bucket.invalidateQueryCache() + " queries");
     }
 
     public static void main(String[] args) {
-        new QueryPrepared().execute();
+        new QueryPlaceholders().execute();
     }
 }
