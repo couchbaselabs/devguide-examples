@@ -1,8 +1,27 @@
+/*
+ * Copyright (c) 2020 Couchbase, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.couchbase.devguide;
 
-import com.couchbase.client.java.document.JsonDocument;
-import com.couchbase.client.java.document.json.JsonObject;
-import com.couchbase.client.java.error.DocumentAlreadyExistsException;
+import com.couchbase.client.core.error.DocumentNotFoundException;
+import com.couchbase.client.java.json.JsonObject;
+import com.couchbase.client.java.kv.GetResult;
+import com.couchbase.client.java.kv.UpsertOptions;
+
+import java.time.Duration;
 
 /**
  * Example of Expiry/TTL in Java for the Couchbase Developer Guide.
@@ -16,44 +35,59 @@ public class Expiration extends ConnectionBase {
         JsonObject content = JsonObject.create().put("some", "value");
 
         LOGGER.info("Storing with an expiration of 2 seconds");
-        bucket.upsert(JsonDocument.create(key, 2, content));
+        bucket.defaultCollection().upsert(key, content, UpsertOptions.upsertOptions().expiry(Duration.ofSeconds(2)));
 
         LOGGER.info("Getting item back immediately");
-        LOGGER.info(bucket.get(key).content());
+        LOGGER.info(bucket.defaultCollection().get(key));
 
         LOGGER.info("Sleeping for 4 seconds...");
         sleepSeconds(4);
-        LOGGER.info("Getting key again...");
+        LOGGER.info("Getting key again (should fail)");
         
         //get returns null if the key doesn't exist
-        if (bucket.get(key) == null) {
+        try {
+            if (bucket.defaultCollection()
+                .get(key) == null) {
+                LOGGER.info("Get failed because item has expired");
+            }
+        } catch (DocumentNotFoundException dnf){
             LOGGER.info("Get failed because item has expired");
         }
 
         LOGGER.info("Storing item again (without expiry)");
-        bucket.upsert(JsonDocument.create(key, content));
+        bucket.defaultCollection().upsert(key, content);
 
         LOGGER.info("Using get-and-touch to retrieve key and modify expiry");
-        JsonDocument rv = bucket.getAndTouch(key, 2);
-        LOGGER.info("Value is:" + rv.content());
+        GetResult rv = bucket.defaultCollection().getAndTouch(key, Duration.ofSeconds(2));
+        LOGGER.info("Value is:" + rv);
 
         LOGGER.info("Sleeping for 4 seconds again");
         sleepSeconds(4);
         LOGGER.info("Getting key again (should fail)");
-        if (bucket.get(key) == null) {
-            LOGGER.info("Failed (not found)");
+        try {
+            if (bucket.defaultCollection()
+                .get(key) == null) {
+                LOGGER.info("Get failed because item has expired");
+            }
+        } catch (DocumentNotFoundException dnf){
+            LOGGER.info("Get failed because item has expired");
         }
 
         LOGGER.info("Storing key again...");
-        bucket.upsert(JsonDocument.create(key, content));
+        bucket.defaultCollection().upsert(key, content);
         LOGGER.info("Using touch (without get). Setting expiry for 1 second");
-        bucket.touch(key, 1);
+        bucket.defaultCollection().touch(key, Duration.ofSeconds(1));
 
         LOGGER.info("Sleeping for 4 seconds...");
         sleepSeconds(4);
-        LOGGER.info("Will try to get item again... (should fail)");
-        if (bucket.get(key) == null) {
-            LOGGER.info("Get failed because key has expired");
+        LOGGER.info("Will try to get item again (should fail)");
+        try {
+            if (bucket.defaultCollection()
+                .get(key) == null) {
+                LOGGER.info("Get failed because item has expired");
+            }
+        } catch (DocumentNotFoundException dnf){
+            LOGGER.info("Get failed because item has expired");
         }
     }
 
